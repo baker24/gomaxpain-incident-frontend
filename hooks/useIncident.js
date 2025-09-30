@@ -1,15 +1,5 @@
 'use client'
 import { useState, useEffect } from "react";
-import axios from "axios";
-import mockIncidents from "@/types/mockincidents.json";
-
-const api = axios.create({
-    baseURL: "https://7777c93936bc.ngrok-free.app/api",
-    headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        "ngrok-skip-browser-warning": "true"
-    }
-});
 
 const API_URL = "https://7777c93936bc.ngrok-free.app/api";
 export default function useIncident() {

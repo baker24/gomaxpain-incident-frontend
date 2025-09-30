@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from "react";
 
-const API_URL = "https://7777c93936bc.ngrok-free.app/api";
 export default function useIncident() {
     const [incident, setIncident] = useState(null);
     const [count, setCount] = useState(0);
@@ -9,11 +8,6 @@ export default function useIncident() {
 
     const fetchIncident = async () => {
         try {
-            // const response = await fetch(`${API_URL}/incidents`, {
-            //     headers: {
-            //         'ngrok-skip-browser-warning': 'true'
-            //     }
-            // });
             const response = await fetch(`/api`);
             console.log('fetchIncident response:', response);
             
@@ -39,11 +33,6 @@ export default function useIncident() {
             setIncident(null);
             console.log('fetchIncidentByBounds - Set incident to null');
             
-            // const response = await fetch(`${API_URL}/incidents/search?minLat=${minLat}&minLng=${minLng}&maxLat=${maxLat}&maxLng=${maxLng}`, {
-            //     headers: {
-            //         'ngrok-skip-browser-warning': 'true'
-            //     }
-            // });
             const response = await fetch(`/api?minLat=${minLat}&minLng=${minLng}&maxLat=${maxLat}&maxLng=${maxLng}`);
             console.log('fetchIncidentByBounds response:', response);
             

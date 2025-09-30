@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+const BACKEND_API_URL = process.env.BACKEND_API_URL || "https://7777c93936bc.ngrok-free.app/api";
+
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const minLat = searchParams.get('minLat');
@@ -7,12 +9,12 @@ export async function GET(request) {
   const maxLat = searchParams.get('maxLat');
   const maxLng = searchParams.get('maxLng');
 
-  let url = "https://7777c93936bc.ngrok-free.app/api/incidents";
+  let url = `${BACKEND_API_URL}/incidents`;
 
   // If bounds are provided, use search endpoint
   if (minLat && minLng && maxLat && maxLng) {
     // Use the correct parameter order that matches the external API
-    url = `https://7777c93936bc.ngrok-free.app/api/incidents/search?minLng=${minLng}&minLat=${minLat}&maxLng=${maxLng}&maxLat=${maxLat}`;
+    url = `${BACKEND_API_URL}/incidents/search?minLng=${minLng}&minLat=${minLat}&maxLng=${maxLng}&maxLat=${maxLat}`;
   }
   console.log("API Route - Fetching URL:", url);
   
@@ -42,11 +44,3 @@ export async function GET(request) {
     return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
   }
 }
-
-// export async function GET_SEARCH(request) {
-//   const { minLat, minLng, maxLat, maxLng } = await request.json();
-  
-//   const res = await fetch(`https://7777c93936bc.ngrok-free.app/api/incidents/search?minLat=${minLat}&minLng=${minLng}&maxLat=${maxLat}&maxLng=${maxLng}`);
-//   const data = await res.json();
-//   return NextResponse.json(data);
-// }

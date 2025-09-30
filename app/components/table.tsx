@@ -1,15 +1,17 @@
 'use client'
+import { Incident } from "@/types/data";
+
 
 interface TableProps {
-    incident: any;
-    onSelectIncident?: (incident: any) => void;
+    incident: Incident[] | null;
+    onSelectIncident?: (incident: Incident) => void;
 }
 
 export default function Table({ incident , onSelectIncident }: TableProps) {
-
+ 
     
 
-    const handleSelectIncident = (incident: any) => {
+    const handleSelectIncident = (incident: Incident) => {
         if (onSelectIncident && typeof onSelectIncident === 'function') {
             onSelectIncident(incident);
         } else {
@@ -46,14 +48,14 @@ export default function Table({ incident , onSelectIncident }: TableProps) {
             </thead>
             <tbody className="[&_tr:last-child]:border-0">
                 {incident && incident.length > 0 ? (
-                    incident.map((incident: any) => incident.intersection !== "" && (
-                        <tr key={incident.id} className="border-b border-primary/10 transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 cursor-pointer" onClick={() => handleSelectIncident(incident)}>
-                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incident.id}</td>
-                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incident.event}</td>
-                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incident.intersection}</td>
-                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incident.city}</td>
-                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incident.latitude}, {incident.longitude}</td>
-                            <td className="p-4 align-middle font-mono text-xs text-foreground/90">{incident.createdAt}</td>
+                    incident.map((incidentItem: Incident) => incidentItem.intersection !== "" && (
+                        <tr key={incidentItem.id} className="border-b border-primary/10 transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 cursor-pointer" onClick={() => handleSelectIncident(incidentItem)}>
+                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incidentItem.id}</td>
+                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incidentItem.event}</td>
+                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incidentItem.intersection}</td>
+                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incidentItem.city}</td>
+                            <td className="p-4 align-middle font-mono text-sm text-foreground/90">{incidentItem.latitude}, {incidentItem.longitude}</td>
+                            <td className="p-4 align-middle font-mono text-xs text-foreground/90">{incidentItem.createdAt}</td>
                         </tr>
                     ))
                 ) : (

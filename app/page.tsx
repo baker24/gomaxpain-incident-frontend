@@ -1,18 +1,17 @@
 'use client'
-import Image from "next/image";
 import Map from "./components/map";
 import Table from "./components/table";
 import useIncident from "@/hooks/useIncident";
 import IncidentPopup from "./components/incidentpopup";
 import { useState } from "react";
-
+import { Incident } from "@/types/data";
 export default function Home() {
-  const { incident, setIncident, fetchIncident, fetchIncidentByBounds } = useIncident();
-  const [selectedIncident, setSelectedIncident] = useState(null);
+  const { incident, fetchIncidentByBounds } = useIncident();
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   console.log("page incident", incident);
 
-  const handleSelectIncident = (incident: any) => {
+  const handleSelectIncident = (incident: Incident) => {
     setSelectedIncident(incident);
     setIsPopupOpen(true);
   }

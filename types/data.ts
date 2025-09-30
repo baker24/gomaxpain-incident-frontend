@@ -7,3 +7,13 @@ export type UnifiedIncident = {
     latitude: number,
     longitude: number,
 }
+
+export type Incident = {
+    id: string,
+    event: string,
+    city: string,
+    intersection: string,
+    latitude: number,
+    longitude: number,
+    createdAt: string,
+}

@@ -1,8 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from "react";
+import { Incident } from "@/types/data";
+
+
 
 interface IncidentPopupProps {
-  incident: any;
+  incident: Incident | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -104,9 +107,9 @@ export default function IncidentPopup({ incident, isOpen, onClose }: IncidentPop
         console.log("weather", weather);
 
         setWeatherData(weather);
-      } catch (error) {
-        console.error('Error fetching weather:', error);
-        setWeatherError(error instanceof Error ? error.message : 'Failed to fetch weather data');
+      } catch (err) {
+        console.error('Error fetching weather:', err);
+        setWeatherError(err instanceof Error ? err.message : 'Failed to fetch weather data');
       } finally {
         setWeatherLoading(false);
       }

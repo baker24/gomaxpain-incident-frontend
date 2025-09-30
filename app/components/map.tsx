@@ -1,17 +1,19 @@
 'use client'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
+import { Incident } from "@/types/data";
+
 
 interface MapProps {
-  incident: any;
+  incident: Incident[] | null;
   fetchIncidentByBounds: (minLat: number, minLng: number, maxLat: number, maxLng: number) => void;
 }
 
 export default function Map({ incident, fetchIncidentByBounds }: MapProps) {
     const mapRef = useRef<HTMLDivElement>(null);
-    const googleMapRef = useRef<any>(null);
-    const markerRef = useRef<any[]>([]);
-    const advancedMarkerRef = useRef<any>(null);
+    const googleMapRef = useRef<google.maps.Map | null>(null);
+    const markerRef = useRef<google.maps.Marker[]>([]);
+    const advancedMarkerRef = useRef<typeof google.maps.Marker | null>(null);
     const getBounds = () => {
       if (!googleMapRef.current) return;
       
@@ -59,9 +61,9 @@ export default function Map({ incident, fetchIncidentByBounds }: MapProps) {
       // Add new markers
       
       console.log("update map Incident incident", incident);
-      incident && incident.forEach((incidentItem: any) => {
+      incident && incident.forEach((incidentItem: Incident) => {
         try {
-          const position = { lat: parseFloat(incidentItem.latitude), lng: parseFloat(incidentItem.longitude) };
+          const position = { lat: Number(incidentItem.latitude), lng: Number(incidentItem.longitude) };
           
           // Validate position coordinates
           if (isNaN(position.lat) || isNaN(position.lng)) {
@@ -94,26 +96,28 @@ export default function Map({ incident, fetchIncidentByBounds }: MapProps) {
             strokeWeight: 0,
           } as google.maps.Symbol;
           
-          const marker = new advancedMarkerRef.current({
-            map: googleMapRef.current,
-            position: position,
-            icon: markerIcon,
-            title: incidentItem.id,
-          });
-          const glowOuterMarker = new advancedMarkerRef.current({
-            map: googleMapRef.current,
-            position: position,
-            icon: glowOuterIcon,
-            title: incidentItem.id,
-          });
-          const glowInnerMarker = new advancedMarkerRef.current({
-            map: googleMapRef.current,
-            position: position,
-            icon: glowInnerIcon,
-            title: incidentItem.id,
-          });
-         
-          markerRef.current.push(marker);
+          if (advancedMarkerRef.current) {
+            const marker = new advancedMarkerRef.current({
+              map: googleMapRef.current,
+              position: position,
+              icon: markerIcon,
+              title: incidentItem.id,
+            });
+            new advancedMarkerRef.current({
+              map: googleMapRef.current,
+              position: position,
+              icon: glowOuterIcon,
+              title: incidentItem.id,
+            });
+            new advancedMarkerRef.current({
+              map: googleMapRef.current,
+              position: position,
+              icon: glowInnerIcon,
+              title: incidentItem.id,
+            });
+          
+            markerRef.current.push(marker);
+          }
         } catch (error) {
           console.error('Error creating marker for incident:', incidentItem, error);
         }
@@ -242,10 +246,12 @@ export default function Map({ incident, fetchIncidentByBounds }: MapProps) {
         updateIncident();
       }
       initMap();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
       updateIncident();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [incident]);
 
     return (

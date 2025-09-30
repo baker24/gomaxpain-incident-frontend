@@ -27,10 +27,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-mono antialiased`}
       >
-            {/* <Script
-              src={`https://maps.googleapis.com/maps/api/js?key=AIzaSyB0ZQlcuDco7sMyUAqCM2iVSbN7Px1NouE&loading=async`}
-              strategy="afterInteractive"
-            /> */}
+            {/* Google Maps API loaded via @googlemaps/js-api-loader in map.tsx */}
         {children}
       </body>
     </html>

@@ -1,0 +1,74 @@
+[
+    {
+        "city": "Orange Country",
+        "createdAt": "2025-09-28T15:52:00Z",
+        "latitude": 25.7617,
+        "longitude": -80.1920,
+        "id": "90266A60-7BD3-4FDD-8B01-D75094D99483",
+        "intersection": "Riverside Fwy E CA-91 E",
+        "event": "Accident"
+    },
+    {
+        "createdAt": "2025-09-28T15:30:00Z",
+        "longitude": -80.1910,
+        "intersection": "",
+        "id": "7DD7A211-0477-45AE-A9BD-1A463CFF5279",
+        "latitude": 25.7617,
+        "city": "Orange Country",
+        "event": "Accident"
+    },
+    {
+        "createdAt": "2025-09-28T15:52:00Z",
+        "event": "Accident",
+        "city": "Orange Country",
+        "intersection": "Riverside Fwy E CA-91 E",
+        "longitude": -80.1940,
+        "id": "858D3CCD-4F94-4E06-8B45-BD4ECE5830DE",
+        "latitude": 25.7627
+    },
+    {
+        "city": "Orange Country",
+        "event": "Accident",
+        "createdAt": "2025-09-28T15:30:00Z",
+        "longitude": -80.1900,
+        "id": "E93E139F-C2CE-4DA9-BE05-0B350C289419",
+        "latitude": 25.7617,
+        "intersection": ""
+    },
+    {
+        "latitude": 25.7627,
+        "event": "Accident",
+        "id": "267F226F-E86E-4B96-9859-CAAAFAE16AAE",
+        "createdAt": "2025-09-28T15:52:00Z",
+        "intersection": "Riverside Fwy E CA-91 E",
+        "city": "Orange Country",
+        "longitude": -80.1940
+    },
+    {
+        "id": "515B2097-58F1-4829-8461-AF3729AA61E2",
+        "intersection": "",
+        "createdAt": "2025-09-28T15:30:00Z",
+        "latitude": 33.8707866026,
+        "city": "Orange Country",
+        "event": "Accident",
+        "longitude": -117.4731320835
+    },
+    {
+        "id": "9E27D603-834A-432A-A9CC-6FDC6F225DA6",
+        "latitude": 33.896645797,
+        "intersection": "Riverside Fwy E CA-91 E",
+        "event": "Accident",
+        "longitude": -117.4839695491,
+        "createdAt": "2025-09-28T15:52:00Z",
+        "city": "Orange Country"
+    },
+    {
+        "event": "Accident",
+        "intersection": "",
+        "latitude": 33.8707866026,
+        "createdAt": "2025-09-28T15:30:00Z",
+        "city": "Orange Country",
+        "longitude": -117.4731320835,
+        "id": "90221384-213F-4617-9B61-73E64B3EF34E"
+    }
+]

@@ -1,38 +1,43 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #007bff;
-  --secondary: #6c757d;
-  --accent: #ff4500;
-  --danger: #dc3545;
+	--background: #ffffff;
+	--foreground: #171717;
+	--primary: #007bff;
+	--secondary: #6c757d;
+	--accent: #ff4500;
+	--danger: #dc3545;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-danger: var(--danger);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-primary: var(--primary);
+	--color-secondary: var(--secondary);
+	--color-accent: var(--accent);
+	--color-danger: var(--danger);
+	--font-sans: var(--font-geist-sans);
+	--font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #007bff;
-    --secondary: #6c757d;
-    --accent: #ff4500;
-    --danger: #dc3545;
-  }
+	:root {
+		--background: #0a0a0a;
+		--foreground: #ededed;
+		--primary: #007bff;
+		--secondary: #6c757d;
+		--accent: #ff4500;
+		--danger: #dc3545;
+	}
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+	background: var(--background);
+	color: var(--foreground);
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Slightly reduce global scale (affects all rem-based sizes) */
+html {
+	font-size: 14px; /* default ~16px → 14px ≈ 87.5% scale */
 }

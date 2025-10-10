@@ -135,31 +135,8 @@ export default function IncidentPopup({
 								</div>
 
 								{/* Incident Location */}
-								<div className="space-y-4">
-									<div className="flex items-center gap-2 mb-3">
-										<svg
-											className="w-4 h-4 text-red-400"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24">
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-											/>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-											/>
-										</svg>
-										<span className="text-sm font-semibold text-red-400 font-mono uppercase tracking-wider">
-											Incident Location
-										</span>
-									</div>
 
+								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									<div className="space-y-3">
 										<div className="space-y-2">
 											<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
@@ -167,59 +144,80 @@ export default function IncidentPopup({
 											</label>
 											<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 												<span className="text-sm text-foreground font-mono">
-													{incident.city || "N/A"}
+													{incident.city.split(",")[0] || "N/A"}
 												</span>
 											</div>
 										</div>
-
-										<div className="space-y-2">
-											<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-												Intersection
-											</label>
-											<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-												<span className="text-sm text-foreground font-mono">
-													{incident.intersection || "N/A"}
-												</span>
-											</div>
+									</div>
+									<div className="space-y-2">
+										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+											State
+										</label>
+										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+											<span className="text-sm text-foreground font-mono">
+												{incident.city.split(",")[1] || "N/A"}
+											</span>
 										</div>
-
-										{/* Coordinates */}
-										<div className="space-y-2">
-											<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-												GPS Coordinates
-											</label>
-											<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-												<div className="grid grid-cols-2 gap-4 text-sm font-mono">
-													<div>
-														<span className="text-red-400/60">Latitude:</span>
-														<br />
-														<span className="text-foreground">
-															{incident.latitude}
-														</span>
-													</div>
-													<div>
-														<span className="text-red-400/60">Longitude:</span>
-														<br />
-														<span className="text-foreground">
-															{incident.longitude}
-														</span>
-													</div>
-												</div>
-											</div>
+									</div>
+									<div className="space-y-2">
+										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+											Zipcode
+										</label>
+										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+											<span className="text-sm text-foreground font-mono">
+												{incident.city.split(",")[2] || "N/A"}
+											</span>
 										</div>
 									</div>
 								</div>
 
-								{/* Timestamp */}
+								<div className="space-y-3"></div>
 								<div className="space-y-2">
 									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										Incident Reported
+										Intersection
 									</label>
 									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 										<span className="text-sm text-foreground font-mono">
-											{formatDate(incident.createdAt)}
+											{incident.intersection || "N/A"}
 										</span>
 									</div>
+								</div>
+
+								{/* Coordinates */}
+								<div className="space-y-2">
+									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										GPS Coordinates
+									</label>
+									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<div className="grid grid-cols-2 gap-4 text-sm font-mono">
+											<div>
+												<span className="text-red-400/60">Latitude:</span>
+												<br />
+												<span className="text-foreground">
+													{incident.latitude}
+												</span>
+											</div>
+											<div>
+												<span className="text-red-400/60">Longitude:</span>
+												<br />
+												<span className="text-foreground">
+													{incident.longitude}
+												</span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							{/* Timestamp */}
+							<div className="space-y-2">
+								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									Incident Reported
+								</label>
+								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<span className="text-sm text-foreground font-mono">
+										{formatDate(incident.createdAt)}
+									</span>
 								</div>
 							</div>
 						</div>

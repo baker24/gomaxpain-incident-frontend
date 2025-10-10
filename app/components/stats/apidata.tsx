@@ -6,13 +6,18 @@ export default function ApiData({
 	apidata: string[];
 	datapulls: TrafficReport["dataPulls"];
 }) {
-	const apiSources = apidata;
-	const dataPulls = datapulls;
+	const apiSources = apidata || [];
+	const dataPulls = datapulls || {
+		totalCities: 0,
+		perCityPerDay: 0,
+		pullsPerDay: 0,
+		pullsPerMonth: 0,
+	};
 
-	const totalCities = dataPulls.totalCities;
-	const perCityPerDay = dataPulls.perCityPerDay;
-	const pullsPerDay = dataPulls.pullsPerDay;
-	const pullsPerMonth = dataPulls.pullsPerMonth;
+	const totalCities = dataPulls.totalCities || 0;
+	const perCityPerDay = dataPulls.perCityPerDay || 0;
+	const pullsPerDay = dataPulls.pullsPerDay || 0;
+	const pullsPerMonth = dataPulls.pullsPerMonth || 0;
 
 	return (
 		<div className="space-y-6">
@@ -112,7 +117,7 @@ export default function ApiData({
 								{pullsPerDay}
 							</div>
 							<div className="text-xs text-secondary font-mono uppercase tracking-wider">
-								Per Day
+								Pulls Per Day
 							</div>
 						</div>
 
@@ -122,25 +127,25 @@ export default function ApiData({
 								{pullsPerMonth.toLocaleString()}
 							</div>
 							<div className="text-xs text-secondary font-mono uppercase tracking-wider">
-								Per Month
+								Estimated Monthly Pulls
 							</div>
 						</div>
 					</div>
 
 					{/* Additional Stats */}
 					<div className="space-y-2">
-						<div className="flex items-center justify-between p-2 bg-primary/5 border border-primary/10 rounded-md">
+						{/* <div className="flex items-center justify-between p-2 bg-primary/5 border border-primary/10 rounded-md">
 							<span className="text-xs text-secondary font-mono">
 								Cities Covered
 							</span>
 							<span className="text-sm font-mono text-foreground font-semibold">
 								{totalCities}
 							</span>
-						</div>
+						</div> */}
 
 						<div className="flex items-center justify-between p-2 bg-primary/5 border border-primary/10 rounded-md">
 							<span className="text-xs text-secondary font-mono">
-								Pulls per City/Day
+								Pulls per Metro/Day
 							</span>
 							<span className="text-sm font-mono text-foreground font-semibold">
 								{perCityPerDay}

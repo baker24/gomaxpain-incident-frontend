@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Incident } from "@/types/data";
-import { mapstyle } from "@/constants/mapstyle";
+import { mapstyle } from "@/app/components/map/constants/mapstyle";
 import State, { City, states } from "@/types/states";
 import { logger } from "@/services/logger";
 

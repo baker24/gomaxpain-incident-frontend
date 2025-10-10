@@ -1,12 +1,15 @@
 "use client";
-import Map from "../components/map/map";
-import Table from "../components/table/table";
+import Map from "@/app/components/map/map";
+import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
-import IncidentPopup from "../components/table/incidentpopup";
-import { useEffect, useState } from "react";
+import IncidentPopup from "@/app/components/table/incidentpopup";
+import { useEffect, useState, useMemo } from "react";
 import { Incident } from "@/types/data";
-import StatsPanel from "../components/stats/stats-panel";
+import StatsPanel from "@/app/components/stats/stats-panel";
 import { logger } from "@/services/logger";
+import { useAccidentMetrics } from "@/hooks/useAccidentMetrics";
+import { TrafficReport } from "@/types/trafficreport";
+
 export default function Home() {
 	const {
 		incident,
@@ -21,6 +24,25 @@ export default function Home() {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
 	const [showStats, setShowStats] = useState(false);
 
+	// Calculate metrics from incidents
+	const calculatedMetrics = useAccidentMetrics(incident);
+
+	// Merge calculated metrics with API traffic report
+	const mergedTrafficReport: TrafficReport | null = useMemo(() => {
+		if (!trafficReport) return null;
+
+		return {
+			...trafficReport,
+			accidentMetrics: {
+				...trafficReport.accidentMetrics,
+				accidentsToday: calculatedMetrics.accidentsToday,
+				accidentsLastHour: calculatedMetrics.accidentsLastHour,
+				previousDayAccidents: calculatedMetrics.previousDayAccidents,
+				// Keep totalAccidents and previousDayPercent from API
+			},
+		};
+	}, [trafficReport, calculatedMetrics]);
+
 	const handleSelectIncident = (incident: Incident, patientID: number) => {
 		setSelectedIncident(incident);
 		setIsPopupOpen(true);
@@ -29,7 +51,7 @@ export default function Home() {
 		setIsPopupOpen(false);
 		setSelectedIncident(null);
 	};
-	logger.info("Traffic Report", trafficReport);
+	logger.info("Traffic Report", mergedTrafficReport);
 	return (
 		<div className="min-h-screen bg-background grid-bg p-6">
 			<div className="mb-6 justify-between">
@@ -86,7 +108,7 @@ export default function Home() {
 				</div>
 				{showStats && (
 					<div className="col-span-4">
-						<StatsPanel trafficreport={trafficReport || null} />
+						<StatsPanel trafficreport={mergedTrafficReport} />
 					</div>
 				)}
 			</div>

@@ -17,3 +17,17 @@ export type Incident = {
 	longitude: number;
 	createdAt: string;
 };
+
+export type IncidentDB = {
+	id: string;
+	event: string;
+	city: string;
+	intersection: string;
+	latitude: number;
+	longitude: number;
+	created_at: string;
+	state: string;
+	external_id: string;
+	source: "TOMTOM" | "WAZE";
+	updated_at: string;
+};

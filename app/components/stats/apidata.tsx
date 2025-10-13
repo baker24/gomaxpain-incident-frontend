@@ -51,7 +51,7 @@ export default function ApiData({
 
 					{/* API Sources List */}
 					<div className="space-y-3">
-						{apiSources.map((source, index) => (
+						{apiSources.map((source) => (
 							<div
 								key={source}
 								className="flex items-center gap-3 p-3 bg-primary/5 border border-primary/10 rounded-md hover:bg-primary/10 transition-colors duration-200">

@@ -1,7 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Incident } from "@/types/data";
-import { PatientData } from "@/types/patientdata";
 import PatientDetails from "./patient-details";
 import { formatDate } from "./utils";
 interface IncidentPopupProps {
@@ -16,7 +15,6 @@ export default function IncidentPopup({
 	onClose,
 }: IncidentPopupProps) {
 	const popupRef = useRef<HTMLDivElement>(null);
-	const [patientData, setPatientData] = useState<PatientData | null>(null);
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -55,14 +53,6 @@ export default function IncidentPopup({
 			document.removeEventListener("keydown", handleEscape);
 		};
 	}, [isOpen, onClose]);
-
-	useEffect(() => {
-		const fetchPatientData = async () => {
-			const response = await fetch(`/api/patients`);
-			const data = await response.json();
-			setPatientData(data[0]);
-		};
-	}, [isOpen, incident?.latitude, incident?.longitude]);
 
 	if (!isOpen || !incident) return null;
 

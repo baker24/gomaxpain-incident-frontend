@@ -9,7 +9,7 @@ const formatDate = (dateString: string) => {
 			minute: "2-digit",
 			timeZoneName: "short",
 		});
-	} catch (error) {
+	} catch {
 		return dateString;
 	}
 };

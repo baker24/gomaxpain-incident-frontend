@@ -1,18 +1,6 @@
-import { PatientData } from "@/types/patientdata";
+import createRandomPatientData from "@/services/patientdata";
 
-interface PatientDetailsProps {
-	patientData: PatientData;
-}
-
-const patientexample: PatientData = {
-	name: "John Doe",
-	dob: "1990-05-01",
-	phone: "3514647377",
-	email: "john.doe@gmail.com",
-	facebook: "john.doe",
-	instagram: "john.doe",
-	twitter: "john.doe",
-};
+const patientexample = createRandomPatientData();
 const patientData = patientexample;
 
 export default function PatientDetails() {
@@ -43,11 +31,22 @@ export default function PatientDetails() {
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="space-y-2">
 					<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
-						Patient Name
+						First Name
 					</label>
 					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 						<span className="text-sm text-foreground font-mono">
-							{patientData?.name}
+							{patientData?.firstname}
+						</span>
+					</div>
+				</div>
+
+				<div className="space-y-2">
+					<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
+						Last Name
+					</label>
+					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
+						<span className="text-sm text-foreground font-mono">
+							{patientData?.lastname}
 						</span>
 					</div>
 				</div>
@@ -58,40 +57,53 @@ export default function PatientDetails() {
 					</label>
 					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 						<span className="text-sm text-foreground font-mono">
-							{patientData?.dob}
+							{patientData?.dob instanceof Date
+								? patientData.dob.toLocaleDateString()
+								: patientData?.dob}
 						</span>
 					</div>
 				</div>
 
 				<div className="space-y-2">
 					<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
-						Phone
+						Sex
 					</label>
 					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 						<span className="text-sm text-foreground font-mono">
-							{patientData?.phone}
-						</span>
-					</div>
-				</div>
-
-				<div className="space-y-2">
-					<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
-						Email
-					</label>
-					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
-						<span className="text-sm text-foreground font-mono">
-							{patientData?.email}
+							{patientData?.sex}
 						</span>
 					</div>
 				</div>
 			</div>
+			<div className="space-y-2">
+				<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
+					Phone
+				</label>
+				<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
+					<span className="text-sm text-foreground font-mono">
+						{patientData?.phone}
+					</span>
+				</div>
+			</div>
+
+			<div className="space-y-2">
+				<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
+					Email
+				</label>
+				<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
+					<span className="text-sm text-foreground font-mono">
+						{patientData?.email}
+					</span>
+				</div>
+			</div>
+			{/* </div> */}
 
 			{/* Social Media - Separate section */}
 			<div className="mt-6">
 				<h4 className="text-sm font-semibold text-blue-400 font-mono uppercase tracking-wider mb-3">
 					Social Media
 				</h4>
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 					<div className="space-y-2">
 						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
 							Facebook
@@ -114,7 +126,7 @@ export default function PatientDetails() {
 						</div>
 					</div>
 
-					<div className="space-y-2">
+					{/* <div className="space-y-2">
 						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
 							Twitter
 						</label>
@@ -123,7 +135,7 @@ export default function PatientDetails() {
 								{patientData?.twitter}
 							</span>
 						</div>
-					</div>
+					</div> */}
 				</div>
 			</div>
 		</div>

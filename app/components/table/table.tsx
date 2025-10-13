@@ -1,16 +1,16 @@
 "use client";
 import { logger } from "@/services/logger";
 import { Incident } from "@/types/data";
-import { formatDate, timeDiff } from "./utils";
+import { timeDiff } from "./utils";
 interface TableProps {
 	incident: Incident[] | null;
-	onSelectIncident?: (incident: Incident, patientID: number) => void;
+	onSelectIncident?: (incident: Incident) => void;
 }
 
 export default function Table({ incident, onSelectIncident }: TableProps) {
-	const handleSelectIncident = (incident: Incident, patientID: number) => {
+	const handleSelectIncident = (incident: Incident) => {
 		if (onSelectIncident && typeof onSelectIncident === "function") {
-			onSelectIncident(incident, patientID);
+			onSelectIncident(incident);
 		} else {
 			logger.error("onSelectIncident is not a function:", onSelectIncident);
 		}
@@ -53,7 +53,7 @@ export default function Table({ incident, onSelectIncident }: TableProps) {
 								<tr
 									key={incidentItem.id}
 									className="h-10 border-b border-primary/10 transition-all duration-200 hover:bg-primary/5 hover:border-primary/20 cursor-pointer"
-									onClick={() => handleSelectIncident(incidentItem, 1)}>
+									onClick={() => handleSelectIncident(incidentItem)}>
 									<td className="px-4 align-middle font-mono text-xs text-foreground/90">
 										{incidentItem.id}
 									</td>

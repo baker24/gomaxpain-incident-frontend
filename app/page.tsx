@@ -3,7 +3,7 @@ import Map from "@/app/components/map/map";
 import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
 import IncidentPopup from "@/app/components/table/incidentpopup";
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Incident } from "@/types/data";
 import StatsPanel from "@/app/components/stats/stats-panel";
 import { logger } from "@/services/logger";
@@ -25,7 +25,7 @@ export default function Home() {
 	const [showStats, setShowStats] = useState(false);
 
 	// Calculate metrics from incidents
-	const calculatedMetrics = useAccidentMetrics(incident);
+	const calculatedMetrics = useAccidentMetrics();
 
 	// Merge calculated metrics with API traffic report
 	const mergedTrafficReport: TrafficReport | null = useMemo(() => {
@@ -43,7 +43,7 @@ export default function Home() {
 		};
 	}, [trafficReport, calculatedMetrics]);
 
-	const handleSelectIncident = (incident: Incident, patientID: number) => {
+	const handleSelectIncident = (incident: Incident) => {
 		setSelectedIncident(incident);
 		setIsPopupOpen(true);
 	};

@@ -16,16 +16,6 @@ export default function AccidentMetrics({
 		previousDayPercent = "0%",
 	} = accidentmetrics || {};
 
-	// Calculate trend
-	const isTodayHigher = accidentsToday > previousDayAccidents;
-	const trendPercentage =
-		previousDayAccidents > 0
-			? (
-					((accidentsToday - previousDayAccidents) / previousDayAccidents) *
-					100
-			  ).toFixed(1)
-			: "0";
-
 	return (
 		<div className="space-y-6">
 			<div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
@@ -74,7 +64,7 @@ export default function AccidentMetrics({
 						{accidentsToday}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Today's Accidents
+						Today&apos;s Accidents
 					</div>
 				</div>
 
@@ -118,7 +108,7 @@ export default function AccidentMetrics({
 						{previousDayAccidents}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Yesterday's Accidents
+						Yesterday&apos;s Accidents
 					</div>
 				</div>
 

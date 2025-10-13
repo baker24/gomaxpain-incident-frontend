@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
 import { Incident } from "@/types/data";
 import { mapstyle } from "@/app/components/map/constants/mapstyle";
-import State, { City, states } from "@/types/states";
+import State, { states } from "@/types/states";
 import { logger } from "@/services/logger";
 
 interface MapProps {
@@ -14,16 +14,10 @@ interface MapProps {
 		maxLat: number,
 		maxLng: number
 	) => void;
-	onSelectIncident?: (incident: Incident) => void;
 }
 
-export default function Map({
-	incident,
-	fetchIncidentByBounds,
-	onSelectIncident,
-}: MapProps) {
+export default function Map({ incident }: MapProps) {
 	const [activeState, setActiveState] = useState<State | null>(null);
-	const [activeCity, setActiveCity] = useState<City | null>(null);
 	const [showWeather, setShowWeather] = useState(false);
 	const mapRef = useRef<HTMLDivElement>(null);
 	const googleMapRef = useRef<google.maps.Map | null>(null);
@@ -36,21 +30,6 @@ export default function Map({
 		null
 	);
 	const [showWind, setShowWind] = useState(false);
-	const getBounds = () => {
-		if (!googleMapRef.current) return;
-
-		const bounds = googleMapRef.current.getBounds();
-		if (!bounds) return;
-
-		const ne = bounds.getNorthEast();
-		const sw = bounds.getSouthWest();
-
-		const minLat = sw.lat();
-		const minLng = sw.lng();
-		const maxLat = ne.lat();
-		const maxLng = ne.lng();
-		fetchIncidentByBounds(minLat, minLng, maxLat, maxLng);
-	};
 
 	const recenterMap = (lat: number, lng: number, zoom: number) => {
 		if (!googleMapRef.current) return;
@@ -75,9 +54,7 @@ export default function Map({
 		markerRef.current = [];
 
 		// Add new markers
-
-		incident &&
-			Array.isArray(incident) &&
+		if (incident && Array.isArray(incident)) {
 			incident.forEach((incidentItem: Incident) => {
 				try {
 					const position = {
@@ -89,14 +66,6 @@ export default function Map({
 					if (isNaN(position.lat) || isNaN(position.lng)) {
 						return;
 					}
-					const svglink =
-						"https://cdn1.iconfinder.com/data/icons/basic-ui-elements-coloricon/21/18-512.png";
-
-					// Create a custom marker icon
-					const svgIcon = {
-						url: svglink,
-						scaledSize: new google.maps.Size(18, 18),
-					};
 
 					const markerIcon = {
 						path: google.maps.SymbolPath.CIRCLE,
@@ -148,6 +117,7 @@ export default function Map({
 					logger.error("updateIncident error:", error);
 				}
 			});
+		}
 	};
 
 	const drawCoverageAreas = async () => {
@@ -171,24 +141,31 @@ export default function Map({
 			const boundingBoxes = result.data || [];
 
 			// Draw rectangles for each bounding box
-			boundingBoxes.forEach((bbox: any) => {
-				const rectangle = new google.maps.Rectangle({
-					bounds: {
-						north: bbox.tr_lat,
-						south: bbox.bl_lat,
-						east: bbox.tr_lon,
-						west: bbox.bl_lon,
-					},
-					strokeColor: "#00FF00",
-					strokeOpacity: 0.6,
-					strokeWeight: 2,
-					fillColor: "#00FF00",
-					fillOpacity: 0.1,
-					map: googleMapRef.current,
-				});
+			boundingBoxes.forEach(
+				(bbox: {
+					bl_lat: number;
+					bl_lon: number;
+					tr_lat: number;
+					tr_lon: number;
+				}) => {
+					const rectangle = new google.maps.Rectangle({
+						bounds: {
+							north: bbox.tr_lat,
+							south: bbox.bl_lat,
+							east: bbox.tr_lon,
+							west: bbox.bl_lon,
+						},
+						strokeColor: "#00FF00",
+						strokeOpacity: 0.6,
+						strokeWeight: 2,
+						fillColor: "#00FF00",
+						fillOpacity: 0.1,
+						map: googleMapRef.current,
+					});
 
-				coverageRectanglesRef.current.push(rectangle);
-			});
+					coverageRectanglesRef.current.push(rectangle);
+				}
+			);
 
 			logger.info("Coverage areas drawn", {
 				count: boundingBoxes.length,
@@ -225,10 +202,9 @@ export default function Map({
 			const WeatherLayer = new google.maps.ImageMapType({
 				getTileUrl: (coord: google.maps.Point, zoom: number) => {
 					const tileRange = 1 << zoom; // total tiles in x/y at this zoom
-					let x = ((coord.x % tileRange) + tileRange) % tileRange; // wrap x horizontally
+					const x = ((coord.x % tileRange) + tileRange) % tileRange; // wrap x horizontally
 					const y = coord.y; // y as-is
 					if (y < 0 || y >= tileRange) return null;
-					const layer = "precipitation_new";
 					return `https://tile.openweathermap.org/map/precipitation_new/${zoom}/${x}/${y}.png?appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`;
 				},
 				tileSize: new google.maps.Size(256, 256),
@@ -239,10 +215,9 @@ export default function Map({
 			const WindLayer = new google.maps.ImageMapType({
 				getTileUrl: (coord: google.maps.Point, zoom: number) => {
 					const tileRange = 1 << zoom; // total tiles in x/y at this zoom
-					let x = ((coord.x % tileRange) + tileRange) % tileRange; // wrap x horizontally
+					const x = ((coord.x % tileRange) + tileRange) % tileRange; // wrap x horizontally
 					const y = coord.y; // y as-is
 					if (y < 0 || y >= tileRange) return null;
-					const layer = "wind_new";
 					return `https://tile.openweathermap.org/map/wind_new/${zoom}/${x}/${y}.png?appid=${process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY}`;
 				},
 				tileSize: new google.maps.Size(256, 256),
@@ -257,20 +232,17 @@ export default function Map({
 			updateIncident();
 		};
 		initMap();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
 		updateIncident();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [incident]);
 
 	const handleStateClick = (state: State) => {
 		setActiveState(state);
 		recenterMap(state.latitude, state.longitude, 6.5);
-	};
-
-	const handleCityClick = (city: City) => {
-		setActiveCity(city);
-		recenterMap(city.latitude, city.longitude, 12);
 	};
 
 	const removeOverlayLayer = (layer: google.maps.ImageMapType) => {

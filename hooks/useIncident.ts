@@ -22,8 +22,10 @@ export default function useIncident() {
 	const fetchIncident = async () => {
 		setLoadState(LoadState.LOADING);
 		try {
+			const API_URL =
+				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 			// Use new accidents endpoint
-			const response = await fetch(`/api/accidents?limit=100`);
+			const response = await fetch(`${API_URL}/accidents?limit=100`);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -51,8 +53,10 @@ export default function useIncident() {
 		try {
 			setIncident(null);
 
+			const API_URL =
+				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 			// Use new accidents endpoint
-			const response = await fetch(`/api/accidents?limit=100`);
+			const response = await fetch(`${API_URL}/accidents?limit=100`);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -82,14 +86,18 @@ export default function useIncident() {
 	};
 
 	const fetchPatients = async () => {
-		const response = await fetch(`/api/patients`);
+		const API_URL =
+			process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+		const response = await fetch(`${API_URL}/patients`);
 		const data = await response.json();
 		setPatients(data);
 	};
 
 	const fetchTrafficReport = async () => {
 		try {
-			const response = await fetch(`/api/metrics`);
+			const API_URL =
+				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+			const response = await fetch(`${API_URL}/metrics`);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);

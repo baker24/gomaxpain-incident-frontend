@@ -35,6 +35,9 @@ export default function Table({ incident, onSelectIncident }: TableProps) {
 						STATE
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
+						ZIPCODE
+					</th>
+					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
 						LATITUDE, LONGITUDE
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
@@ -61,10 +64,13 @@ export default function Table({ incident, onSelectIncident }: TableProps) {
 										{incidentItem.intersection}
 									</td>
 									<td className="px-4 align-middle font-mono text-xs text-foreground/90">
-										{incidentItem.city.split(",")[0]}
+										{incidentItem.city}
 									</td>
 									<td className="px-4 align-middle font-mono text-xs text-foreground/90">
-										{incidentItem.city.split(",")[1]}
+										{incidentItem.state}
+									</td>
+									<td className="px-4 align-middle font-mono text-xs text-foreground/90">
+										{incidentItem.zipcode}
 									</td>
 									<td className="px-4 align-middle font-mono text-xs text-foreground/90">
 										{incidentItem.latitude}, {incidentItem.longitude}

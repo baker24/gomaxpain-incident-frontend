@@ -12,6 +12,8 @@ export type Incident = {
 	id: string;
 	event: string;
 	city: string;
+	state: string;
+	zipcode: string;
 	intersection: string;
 	latitude: number;
 	longitude: number;
@@ -22,11 +24,12 @@ export type IncidentDB = {
 	id: string;
 	event: string;
 	city: string;
+	state: string;
+	zipcode: string;
 	intersection: string;
 	latitude: number;
 	longitude: number;
 	created_at: string;
-	state: string;
 	external_id: string;
 	source: "TOMTOM" | "WAZE";
 	updated_at: string;

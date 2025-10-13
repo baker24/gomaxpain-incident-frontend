@@ -29,6 +29,7 @@ export default function Map({
 	const googleMapRef = useRef<google.maps.Map | null>(null);
 	const markerRef = useRef<google.maps.Marker[]>([]);
 	const advancedMarkerRef = useRef<typeof google.maps.Marker | null>(null);
+	const coverageRectanglesRef = useRef<google.maps.Rectangle[]>([]);
 	const [precipitationLayer, setPrecipitationLayer] =
 		useState<google.maps.ImageMapType | null>(null);
 	const [windLayer, setWindLayer] = useState<google.maps.ImageMapType | null>(
@@ -125,21 +126,21 @@ export default function Map({
 						const marker = new advancedMarkerRef.current({
 							map: googleMapRef.current,
 							position: position,
-							icon: svgIcon,
+							icon: markerIcon,
 							title: incidentItem.id,
 						});
-						// new advancedMarkerRef.current({
-						// 	map: googleMapRef.current,
-						// 	position: position,
-						// 	icon: glowOuterIcon,
-						// 	title: incidentItem.id,
-						// });
-						// new advancedMarkerRef.current({
-						// 	map: googleMapRef.current,
-						// 	position: position,
-						// 	icon: glowInnerIcon,
-						// 	title: incidentItem.id,
-						// });
+						new advancedMarkerRef.current({
+							map: googleMapRef.current,
+							position: position,
+							icon: glowOuterIcon,
+							title: incidentItem.id,
+						});
+						new advancedMarkerRef.current({
+							map: googleMapRef.current,
+							position: position,
+							icon: glowInnerIcon,
+							title: incidentItem.id,
+						});
 
 						markerRef.current.push(marker);
 					}
@@ -147,6 +148,54 @@ export default function Map({
 					logger.error("updateIncident error:", error);
 				}
 			});
+	};
+
+	const drawCoverageAreas = async () => {
+		if (!googleMapRef.current) return;
+
+		// Clear existing rectangles
+		coverageRectanglesRef.current.forEach((rect) => rect.setMap(null));
+		coverageRectanglesRef.current = [];
+
+		try {
+			const API_URL =
+				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+			const response = await fetch(`${API_URL}/metrics/coverage-areas`);
+
+			if (!response.ok) {
+				console.error("Failed to fetch coverage areas");
+				return;
+			}
+
+			const result = await response.json();
+			const boundingBoxes = result.data || [];
+
+			// Draw rectangles for each bounding box
+			boundingBoxes.forEach((bbox: any) => {
+				const rectangle = new google.maps.Rectangle({
+					bounds: {
+						north: bbox.tr_lat,
+						south: bbox.bl_lat,
+						east: bbox.tr_lon,
+						west: bbox.bl_lon,
+					},
+					strokeColor: "#00FF00",
+					strokeOpacity: 0.6,
+					strokeWeight: 2,
+					fillColor: "#00FF00",
+					fillOpacity: 0.1,
+					map: googleMapRef.current,
+				});
+
+				coverageRectanglesRef.current.push(rectangle);
+			});
+
+			logger.info("Coverage areas drawn", {
+				count: boundingBoxes.length,
+			});
+		} catch (error) {
+			console.error("Error drawing coverage areas:", error);
+		}
 	};
 
 	useEffect(() => {
@@ -201,6 +250,10 @@ export default function Map({
 				opacity: 1.0,
 			});
 			setWindLayer(WindLayer);
+
+			// Draw coverage areas
+			drawCoverageAreas();
+
 			updateIncident();
 		};
 		initMap();

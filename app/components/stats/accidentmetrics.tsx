@@ -28,6 +28,34 @@ export default function AccidentMetrics({
 
 	return (
 		<div className="space-y-6">
+			<div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+				<div className="flex items-center gap-3">
+					<div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+					<span className="text-sm font-mono text-foreground/80 font-semibold">
+						Last Updated at{" "}
+						{(() => {
+							const now = new Date();
+							const hours = now.setMinutes(0, 0, 0);
+							const hoursDate = new Date(hours);
+
+							// Format with date, time, and timezone
+							const dateString = hoursDate.toLocaleDateString("en-US", {
+								year: "numeric",
+								month: "short",
+								day: "numeric",
+							});
+							const timeString = hoursDate.toLocaleTimeString("en-US", {
+								hour: "numeric",
+								minute: "2-digit",
+								hour12: true,
+								timeZoneName: "short",
+							});
+
+							return `${dateString}, ${timeString}`;
+						})()}
+					</span>
+				</div>
+			</div>
 			{/* Total Accidents - Top Priority */}
 			<div className="bg-background/80 border border-primary/20 rounded-lg p-8 text-center">
 				<div className="text-4xl font-bold text-foreground font-mono mb-3">
@@ -55,8 +83,29 @@ export default function AccidentMetrics({
 					<div className="text-4xl font-bold text-foreground font-mono mb-2">
 						{accidentsLastHour}
 					</div>
-					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
+					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-2">
 						Last Hour
+					</div>
+					<div className="text-xs text-secondary/60 font-mono">
+						{(() => {
+							const now = new Date();
+							const lastHour = new Date(now);
+							lastHour.setMinutes(0, 0, 0);
+							const prevHour = new Date(lastHour);
+							prevHour.setHours(prevHour.getHours() - 1);
+
+							// Format to 12-hour time with AM/PM in user's timezone
+							const formatTime = (date: Date) => {
+								return date.toLocaleTimeString("en-US", {
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+									timeZoneName: "short",
+								});
+							};
+
+							return `${formatTime(prevHour)} - ${formatTime(lastHour)}`;
+						})()}
 					</div>
 				</div>
 			</div>
@@ -83,33 +132,6 @@ export default function AccidentMetrics({
 					</div>
 				</div>
 			</div>
-
-			{/* <div className="bg-background/60 border border-primary/10 rounded-lg p-6">
-				<div className="flex items-center justify-between">
-					<div className="flex items-center gap-6">
-						<div className="text-3xl font-bold text-foreground font-mono">
-							{previousDayAccidents}
-						</div>
-						<div>
-							<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider">
-								Yesterday's Accidents
-							</div>
-							<div className="text-sm text-secondary font-mono">
-								{previousDayPercent}% of US daily accidents
-							</div>
-						</div>
-					</div>
-					<div className="text-right">
-						<div className="text-xl font-bold text-foreground font-mono">
-							{accidentsToday - previousDayAccidents > 0 ? "+" : ""}
-							{accidentsToday - previousDayAccidents}
-						</div>
-						<div className="text-sm text-secondary font-mono">
-							Difference from today
-						</div>
-					</div>
-				</div>
-			</div> */}
 		</div>
 	);
 }

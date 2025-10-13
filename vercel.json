@@ -4,5 +4,8 @@
 			"path": "/api/cron",
 			"schedule": "0 * * * *"
 		}
-	]
+	],
+	"env": {
+		"NEXT_PUBLIC_API_URL": "https://gomaxpain-incident-backend.onrender.com/api"
+	}
 }

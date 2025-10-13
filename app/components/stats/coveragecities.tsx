@@ -1,41 +1,58 @@
 "use client";
 import { useState } from "react";
+import { useCoverageStats } from "@/hooks/useCoverageStats";
+
 interface CoverageCitiesProps {
-	coveragecities: string[];
-	converagestate: string[];
+	coveragecities?: string[];
+	converagestate?: string[];
 }
 
 export default function CoverageCities({
 	coveragecities,
 	converagestate,
 }: CoverageCitiesProps) {
-	const coverageCities = coveragecities || [];
-	const coverageStates = converagestate || [];
+	// Fetch real coverage data from API
+	const { coverageStats, loading, error } = useCoverageStats();
 
 	// track if main card is expanded
 	const [isExpanded, setIsExpanded] = useState(false);
 
-	// Group cities by state
-	const citiesByState = {
-		California: [
-			"San Diego",
-			"San Francisco",
-			"San Jose",
-			"Los Angeles",
-			"Sacramento",
-			"Oakland",
-		],
-		Texas: ["Houston", "Dallas", "San Antonio", "Austin"],
-		Florida: [
-			"Miami",
-			"Jacksonville",
-			"Tampa",
-			"Tallahassee",
-			"Fort Lauderdale",
-			"West Palm Beach",
-			"St. Petersburg",
-		],
-	};
+	// Use real data if available, fallback to props
+	const states = coverageStats?.states || [];
+	const cities = coverageStats?.cities || [];
+	const totalStates = coverageStats?.totalStates || converagestate?.length || 0;
+	const totalCities = coverageStats?.totalCities || coveragecities?.length || 0;
+
+	// Group cities by state from real data
+	const citiesByState: Record<
+		string,
+		Array<{ city: string; count: number }>
+	> = {};
+
+	cities.forEach((cityData) => {
+		const stateName = getStateName(cityData.state);
+		if (!citiesByState[stateName]) {
+			citiesByState[stateName] = [];
+		}
+		if (cityData.city !== "Unknown") {
+			citiesByState[stateName].push({
+				city: cityData.city,
+				count: cityData.count,
+			});
+		}
+	});
+
+	// Helper function to convert state code to full name
+	function getStateName(stateCode: string): string {
+		const stateNames: Record<string, string> = {
+			CA: "California",
+			FL: "Florida",
+			NY: "New York",
+			NJ: "New Jersey",
+			TX: "Texas",
+		};
+		return stateNames[stateCode] || stateCode;
+	}
 
 	return (
 		<div className="space-y-6">
@@ -97,7 +114,7 @@ export default function CoverageCities({
 					<div className="grid grid-cols-2 gap-4 mb-6">
 						<div className="text-center">
 							<div className="text-2xl font-bold text-foreground font-mono">
-								{coverageCities.length}
+								{totalCities}
 							</div>
 							<div className="text-xs text-secondary font-mono uppercase tracking-wider">
 								Metros
@@ -105,7 +122,7 @@ export default function CoverageCities({
 						</div>
 						<div className="text-center">
 							<div className="text-2xl font-bold text-foreground font-mono">
-								{coverageStates.length}
+								{totalStates}
 							</div>
 							<div className="text-xs text-secondary font-mono uppercase tracking-wider">
 								States
@@ -130,38 +147,64 @@ export default function CoverageCities({
 			{/* States and Cities - Show when main card is expanded */}
 			{isExpanded && (
 				<div id="coverage-details" className="space-y-4">
-					{coverageStates.map((state) => (
-						<div key={state} className="relative group">
-							{/* Subtle glow for state cards */}
-							<div className="absolute -inset-0.5 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+					{loading && (
+						<div className="text-center py-4 text-sm text-foreground/60 font-mono">
+							Loading coverage data...
+						</div>
+					)}
 
-							<div className="relative bg-background/60 backdrop-blur-sm border border-primary/10 rounded-lg p-4 hover:border-primary/20 transition-all duration-300">
-								{/* State header */}
-								<div className="flex items-center justify-between mb-3">
-									<h4 className="text-lg font-semibold text-foreground font-mono">
-										{state}
-									</h4>
-									<div className="text-xs text-primary/60 font-mono">
-										{citiesByState[state as keyof typeof citiesByState]?.length}{" "}
-										cities
+					{error && (
+						<div className="text-center py-4 text-sm text-red-500 font-mono">
+							Error loading data: {error}
+						</div>
+					)}
+
+					{!loading &&
+						!error &&
+						Object.keys(citiesByState).map((stateName) => {
+							const stateData = states.find(
+								(s) => getStateName(s.state) === stateName
+							);
+							const stateCities = citiesByState[stateName];
+
+							return (
+								<div key={stateName} className="relative group">
+									{/* Subtle glow for state cards */}
+									<div className="absolute -inset-0.5 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg blur opacity-50 group-hover:opacity-75 transition duration-500"></div>
+
+									<div className="relative bg-background/60 backdrop-blur-sm border border-primary/10 rounded-lg p-4 hover:border-primary/20 transition-all duration-300">
+										{/* State header with accident count */}
+										<div className="flex items-center justify-between mb-3">
+											<h4 className="text-lg font-semibold text-foreground font-mono">
+												{stateName}
+											</h4>
+											<div className="flex items-center gap-3">
+												<div className="text-xs text-accent/80 font-mono font-semibold">
+													{stateData?.count || 0} accidents
+												</div>
+												<div className="text-xs text-primary/60 font-mono">
+													{stateCities?.length || 0} cities
+												</div>
+											</div>
+										</div>
+
+										{/* Cities grid with accident counts */}
+										<div className="grid grid-cols-2 gap-2">
+											{stateCities?.map((cityData, idx) => (
+												<div
+													key={`${cityData.city}-${stateName}-${idx}`}
+													className="px-3 py-2 bg-primary/5 border border-primary/10 rounded-md text-sm font-mono text-foreground/90 hover:bg-primary/10 hover:border-primary/20 transition-colors duration-200 flex items-center justify-between">
+													<span>{cityData.city}</span>
+													<span className="text-xs text-accent/70 font-semibold">
+														{cityData.count}
+													</span>
+												</div>
+											))}
+										</div>
 									</div>
 								</div>
-
-								{/* Cities grid */}
-								<div className="grid grid-cols-2 gap-2">
-									{citiesByState[state as keyof typeof citiesByState]?.map(
-										(city) => (
-											<div
-												key={city}
-												className="px-3 py-2 bg-primary/5 border border-primary/10 rounded-md text-sm font-mono text-foreground/90 hover:bg-primary/10 hover:border-primary/20 transition-colors duration-200">
-												{city}
-											</div>
-										)
-									)}
-								</div>
-							</div>
-						</div>
-					))}
+							);
+						})}
 				</div>
 			)}
 
@@ -174,9 +217,14 @@ export default function CoverageCities({
 					</span>
 				</div>
 				<div className="text-xs text-secondary font-mono">
-					Monitoring {coverageCities.length} cities across{" "}
-					{coverageStates.length} states
+					Monitoring {totalCities} cities across {totalStates} states
 				</div>
+				{coverageStats && (
+					<div className="mt-2 text-xs text-accent/70 font-mono font-semibold">
+						Total: {states.reduce((sum, s) => sum + s.count, 0)} accidents
+						tracked
+					</div>
+				)}
 			</div>
 		</div>
 	);

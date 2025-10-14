@@ -20,6 +20,11 @@ export default function PatientDetails() {
 		const firstLetter = email.slice(0, 1);
 		return `${firstLetter}******@${domain}`;
 	};
+	const maskString = (str: string): string => {
+		if (!str || str.length === 0) return str;
+		if (str.length === 1) return str;
+		return str[0] + "*".repeat(str.length - 1);
+	};
 
 	return (
 		<div className="space-y-4">
@@ -44,7 +49,7 @@ export default function PatientDetails() {
 					</label>
 					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 						<span className="text-sm text-foreground font-mono">
-							{patientData?.lastname}
+							{maskString(patientData?.lastname)}
 						</span>
 					</div>
 				</div>
@@ -105,7 +110,7 @@ export default function PatientDetails() {
 						</label>
 						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
 							<span className="text-sm text-foreground font-mono">
-								{patientData?.facebook}
+								{maskString(patientData?.facebook)}
 							</span>
 						</div>
 					</div>
@@ -116,7 +121,7 @@ export default function PatientDetails() {
 						</label>
 						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
 							<span className="text-sm text-foreground font-mono">
-								{patientData?.instagram}
+								{maskString(patientData?.instagram)}
 							</span>
 						</div>
 					</div>
@@ -126,7 +131,7 @@ export default function PatientDetails() {
 						</label>
 						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
 							<span className="text-sm text-foreground font-mono">
-								{patientData?.twitter}
+								{maskString(patientData?.twitter)}
 							</span>
 						</div>
 					</div>
@@ -136,21 +141,10 @@ export default function PatientDetails() {
 						</label>
 						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
 							<span className="text-sm text-foreground font-mono">
-								{patientData?.tiktok}
+								{maskString(patientData?.tiktok)}
 							</span>
 						</div>
 					</div>
-
-					{/* <div className="space-y-2">
-						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
-							Twitter
-						</label>
-						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
-							<span className="text-sm text-foreground font-mono">
-								{patientData?.twitter}
-							</span>
-						</div>
-					</div> */}
 				</div>
 			</div>
 		</div>

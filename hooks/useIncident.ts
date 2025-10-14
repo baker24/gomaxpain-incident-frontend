@@ -105,26 +105,25 @@ export default function useIncident() {
 
 			const result = await response.json();
 
-			// Handle new API format
+			// Handle new API format - it now matches TrafficReport interface exactly
 			if (result.success && result.data) {
-				// Map new format to old TrafficReport format
 				const trafficData: TrafficReport = {
-					apiSources: ["TomTom"],
-					dataPulls: {
-						perCityPerDay: 4,
-						totalCities: 5,
-						pullsPerMonth: 720,
-						pullsPerDay: 24,
+					apiSources: result.data.apiSources || ["TomTom", "Waze"],
+					dataPulls: result.data.dataPulls || {
+						perCityPerDay: 24,
+						totalCities: 0,
+						pullsPerMonth: 0,
+						pullsPerDay: 0,
 					},
-					coverageStates: ["CA"],
-					accidentMetrics: {
-						accidentsLastHour: result.data.lastHourCount || 0,
-						accidentsToday: result.data.todayCount || 0,
-						totalAccidents: result.data.total || 0,
-						previousDayAccidents: result.data.previousDayAccidents || 0,
-						previousDayPercent: result.data.previousDayPercent || "0%",
+					coverageStates: result.data.coverageStates || [],
+					accidentMetrics: result.data.accidentMetrics || {
+						accidentsLastHour: 0,
+						accidentsToday: 0,
+						totalAccidents: 0,
+						previousDayAccidents: 0,
+						previousDayPercent: "0%",
 					},
-					coverageCities: ["San Francisco", "Oakland", "Sacramento"],
+					coverageCities: result.data.coverageCities || [],
 				};
 				setTrafficReport(trafficData);
 			}

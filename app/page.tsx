@@ -3,12 +3,10 @@ import Map from "@/app/components/map/map";
 import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
 import IncidentPopup from "@/app/components/table/incidentpopup";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Incident } from "@/types/data";
 import StatsPanel from "@/app/components/stats/stats-panel";
 import { logger } from "@/services/logger";
-import { useAccidentMetrics } from "@/hooks/useAccidentMetrics";
-import { TrafficReport } from "@/types/trafficreport";
 
 export default function Home() {
 	const {
@@ -24,24 +22,8 @@ export default function Home() {
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
 	const [showStats, setShowStats] = useState(false);
 
-	// Calculate metrics from incidents
-	const calculatedMetrics = useAccidentMetrics();
-
-	// Merge calculated metrics with API traffic report
-	const mergedTrafficReport: TrafficReport | null = useMemo(() => {
-		if (!trafficReport) return null;
-
-		return {
-			...trafficReport,
-			accidentMetrics: {
-				...trafficReport.accidentMetrics,
-				accidentsToday: calculatedMetrics.accidentsToday,
-				accidentsLastHour: calculatedMetrics.accidentsLastHour,
-				previousDayAccidents: calculatedMetrics.previousDayAccidents,
-				// Keep totalAccidents and previousDayPercent from API
-			},
-		};
-	}, [trafficReport, calculatedMetrics]);
+	// Use backend metrics directly - no client-side calculation needed
+	// Backend already calculates all metrics from full database
 
 	const handleSelectIncident = (incident: Incident) => {
 		setSelectedIncident(incident);
@@ -51,7 +33,7 @@ export default function Home() {
 		setIsPopupOpen(false);
 		setSelectedIncident(null);
 	};
-	logger.info("Traffic Report", mergedTrafficReport);
+	logger.info("Traffic Report", trafficReport);
 	return (
 		<div className="min-h-screen bg-background grid-bg p-6">
 			<div className="mb-6 justify-between">
@@ -108,7 +90,7 @@ export default function Home() {
 				</div>
 				{showStats && (
 					<div className="col-span-4">
-						<StatsPanel trafficreport={mergedTrafficReport} />
+						<StatsPanel trafficreport={trafficReport} />
 					</div>
 				)}
 			</div>

@@ -142,7 +142,7 @@ export default function AccidentMetrics({
 						{previousDayPercent}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Of US daily incidents detected
+						Of US daily incidents detected Yesterday
 					</div>
 				</div>
 			</div>

@@ -195,6 +195,7 @@ export default function Map({ incident }: MapProps) {
 				mapTypeControl: false,
 				streetViewControl: false,
 				styles: mapstyle,
+				zoomControl: true,
 			};
 			const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
 			googleMapRef.current = map;

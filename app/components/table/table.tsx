@@ -23,7 +23,7 @@ export default function Table({ incident, onSelectIncident }: TableProps) {
 						ID
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
-						EVENT
+						INCIDENT
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
 						INTERSECTION
@@ -35,7 +35,7 @@ export default function Table({ incident, onSelectIncident }: TableProps) {
 						STATE
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
-						ZIPCODE
+						ZIP CODE
 					</th>
 					<th className="h-10 px-4 text-left align-middle font-semibold text-primary font-mono text-xs tracking-wider uppercase bg-primary/5">
 						LATITUDE, LONGITUDE

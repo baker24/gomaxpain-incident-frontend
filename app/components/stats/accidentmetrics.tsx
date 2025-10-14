@@ -47,12 +47,36 @@ export default function AccidentMetrics({
 				</div>
 			</div>
 			{/* Total Accidents - Top Priority */}
-			<div className="bg-background/80 border border-primary/20 rounded-lg p-8 text-center">
+			<div className="bg-background/80 border border-primary/20 rounded-lg p-8 pb-4 text-center">
 				<div className="text-4xl font-bold text-foreground font-mono mb-3">
 					{totalAccidents.toLocaleString()}
 				</div>
-				<div className="text-lg font-medium text-primary/80 font-mono uppercase tracking-wider">
+				<div className="text-lg font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
 					Total Accidents Detected
+				</div>
+				{/* Last updated */}
+				<div className="flex items-center justify-center gap-1 px-2 py-1 rounded-full text-xs font-mono bg-primary/10 text-primary/80 border border-primary/20">
+					<svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+						<path
+							fillRule="evenodd"
+							d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+							clipRule="evenodd"
+						/>
+					</svg>
+					Since{" "}
+					{(() => {
+						// Start date: Oct 13, 2025 4:00 AM CDT (UTC-5)
+						const startDate = new Date("2025-10-13T09:00:00Z");
+						return startDate.toLocaleString("en-US", {
+							year: "numeric",
+							month: "short",
+							day: "numeric",
+							hour: "numeric",
+							minute: "2-digit",
+							hour12: true,
+							timeZoneName: "short",
+						});
+					})()}
 				</div>
 			</div>
 
@@ -64,7 +88,7 @@ export default function AccidentMetrics({
 						{accidentsToday}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Today&apos;s Accidents
+						Incidents Detected Today
 					</div>
 				</div>
 
@@ -74,7 +98,7 @@ export default function AccidentMetrics({
 						{accidentsLastHour}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-2">
-						Last Hour
+						Incidents Detected Last Hour
 					</div>
 					<div className="text-xs text-secondary/60 font-mono">
 						{(() => {
@@ -108,7 +132,7 @@ export default function AccidentMetrics({
 						{previousDayAccidents}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Yesterday&apos;s Accidents
+						Incidents Detected Yesterday
 					</div>
 				</div>
 
@@ -118,7 +142,7 @@ export default function AccidentMetrics({
 						{previousDayPercent}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Of US daily accidents
+						Of US daily incidents detected
 					</div>
 				</div>
 			</div>

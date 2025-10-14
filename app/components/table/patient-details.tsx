@@ -1,31 +1,29 @@
+import { useState } from "react";
 import createRandomPatientData from "@/services/patientdata";
 
-const patientexample = createRandomPatientData();
-const patientData = patientexample;
-
 export default function PatientDetails() {
+	// Generate new patient data each time the component mounts
+	const [patientData] = useState(() => createRandomPatientData());
+
+	// Function to mask phone number, showing only last 4 digits
+	const maskPhoneNumber = (phone: string) => {
+		// Remove all non-digit characters
+		const digits = phone.replace(/\D/g, "");
+		// Get last 4 digits
+		const lastFour = digits.slice(-4);
+		// Return formatted masked number
+		return `***-***-${lastFour}`;
+	};
+
+	const maskEmail = (email: string) => {
+		const domain = email.split("@")[1];
+		const firstLetter = email.slice(0, 1);
+		return `${firstLetter}******@${domain}`;
+	};
+
 	return (
 		<div className="space-y-4">
 			{/* Add a note to clarify this is patient data */}
-			<div className="mb-4 p-3 bg-blue-500/10 border border-blue-500/20 rounded-md">
-				<div className="flex items-center gap-2">
-					<svg
-						className="w-4 h-4 text-blue-400"
-						fill="none"
-						stroke="currentColor"
-						viewBox="0 0 24 24">
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							strokeWidth={2}
-							d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-						/>
-					</svg>
-					<span className="text-xs font-mono text-blue-400 font-semibold">
-						Patient data is separate from incident location
-					</span>
-				</div>
-			</div>
 
 			{/* Patient fields with blue theme */}
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -66,11 +64,11 @@ export default function PatientDetails() {
 
 				<div className="space-y-2">
 					<label className="text-sm font-medium text-blue-400/80 font-mono uppercase tracking-wider">
-						Sex
+						Zipcode
 					</label>
 					<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 						<span className="text-sm text-foreground font-mono">
-							{patientData?.sex}
+							{patientData?.zipcode}
 						</span>
 					</div>
 				</div>
@@ -81,7 +79,7 @@ export default function PatientDetails() {
 				</label>
 				<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 					<span className="text-sm text-foreground font-mono">
-						{patientData?.phone}
+						{maskPhoneNumber(patientData?.phone || "")}
 					</span>
 				</div>
 			</div>
@@ -92,7 +90,7 @@ export default function PatientDetails() {
 				</label>
 				<div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-md">
 					<span className="text-sm text-foreground font-mono">
-						{patientData?.email}
+						{maskEmail(patientData?.email || "")}
 					</span>
 				</div>
 			</div>
@@ -100,9 +98,6 @@ export default function PatientDetails() {
 
 			{/* Social Media - Separate section */}
 			<div className="mt-6">
-				<h4 className="text-sm font-semibold text-blue-400 font-mono uppercase tracking-wider mb-3">
-					Social Media
-				</h4>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
 					<div className="space-y-2">
 						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
@@ -122,6 +117,26 @@ export default function PatientDetails() {
 						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
 							<span className="text-sm text-foreground font-mono">
 								{patientData?.instagram}
+							</span>
+						</div>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
+							Twitter
+						</label>
+						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
+							<span className="text-sm text-foreground font-mono">
+								{patientData?.twitter}
+							</span>
+						</div>
+					</div>
+					<div className="space-y-2">
+						<label className="text-xs font-medium text-blue-400/60 font-mono uppercase tracking-wider">
+							TikTok
+						</label>
+						<div className="p-2 bg-blue-500/5 border border-blue-500/20 rounded-md">
+							<span className="text-sm text-foreground font-mono">
+								{patientData?.tiktok}
 							</span>
 						</div>
 					</div>

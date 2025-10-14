@@ -240,7 +240,12 @@ export default function Map({ incident }: MapProps) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [incident]);
 
-	const handleStateClick = (state: State) => {
+	const handleStateClick = (state: State | null) => {
+		if (state === null) {
+			setActiveState(null);
+			recenterMap(35.906, -100.05, 4.5);
+			return;
+		}
 		setActiveState(state);
 		recenterMap(state.latitude, state.longitude, 6.5);
 	};
@@ -286,7 +291,17 @@ export default function Map({ incident }: MapProps) {
 			<div className="flex justify-between">
 				{/* Location Buttons */}
 				<div className="flex gap-3 flex-wrap">
-					{/* <h1 className="text-2xl font-bold text-foreground">States : </h1> */}
+					<button
+						onClick={() => handleStateClick(null)}
+						style={{
+							backgroundColor:
+								activeState?.name === null
+									? "rgba(0, 123, 255, 0.1)"
+									: "transparent",
+						}}
+						className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
+						All
+					</button>
 					{states.map((state) => (
 						<button
 							key={state.name}

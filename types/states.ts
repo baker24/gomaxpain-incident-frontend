@@ -35,17 +35,18 @@ export const Florida: State = {
 	],
 };
 
-const Texas: State = {
-	name: "Texas",
-	latitude: 31.9686,
-	longitude: -99.9018,
+const NewYork: State = {
+	name: "New York",
+	latitude: 41.9128,
+	longitude: -74.006,
 	cities: [
-		{ name: "Austin", latitude: 30.2672, longitude: -97.7431 },
-		{ name: "Houston", latitude: 29.7604, longitude: -95.3698 },
-		{ name: "Dallas", latitude: 32.7767, longitude: -96.797 },
-		{ name: "San Antonio", latitude: 29.4241, longitude: -98.4936 },
+		{ name: "New York", latitude: 40.7128, longitude: -74.006 },
+		{ name: "Brooklyn", latitude: 40.6925, longitude: -73.977 },
+		{ name: "Queens", latitude: 40.7282, longitude: -73.7949 },
+		{ name: "Bronx", latitude: 40.8505, longitude: -73.8696 },
+		{ name: "Staten Island", latitude: 40.5795, longitude: -74.1502 },
 	],
 };
 
-export const states: State[] = [California, Florida, Texas];
+export const states: State[] = [California, Florida, NewYork];
 export default State;

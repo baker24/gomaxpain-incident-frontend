@@ -6,7 +6,8 @@ function createRandomPatientData(): PatientData {
 	const firstname = faker.person.firstName(sex);
 	const lastname = faker.person.lastName();
 	const dob = faker.date.birthdate();
-	const phone = faker.phone.number();
+	const phone = faker.phone.number({ style: "national" });
+	const zipcode = faker.location.zipCode();
 	const email = faker.internet.email({
 		firstName: firstname,
 		lastName: lastname,
@@ -23,15 +24,21 @@ function createRandomPatientData(): PatientData {
 		firstName: firstname,
 		lastName: lastname,
 	});
+	const tiktok = faker.internet.username({
+		firstName: firstname,
+		lastName: lastname,
+	});
 	return {
 		firstname: firstname,
 		lastname: lastname,
 		dob: dob,
 		phone: phone,
+		zipcode: zipcode,
 		email: email,
 		facebook: facebook,
 		instagram: instagram,
 		twitter: twitter,
+		tiktok: tiktok,
 		sex: sex,
 	};
 }

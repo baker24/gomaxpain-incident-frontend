@@ -4,8 +4,10 @@ export interface PatientData {
 	dob: Date;
 	phone: string;
 	email: string;
+	zipcode: string;
 	facebook: string;
 	instagram: string;
 	twitter: string;
+	tiktok: string;
 	sex: string;
 }

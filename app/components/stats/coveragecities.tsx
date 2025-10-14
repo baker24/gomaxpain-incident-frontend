@@ -117,7 +117,7 @@ export default function CoverageCities({
 								{totalCities}
 							</div>
 							<div className="text-xs text-secondary font-mono uppercase tracking-wider">
-								Metros
+								Cities
 							</div>
 						</div>
 						<div className="text-center">
@@ -128,18 +128,6 @@ export default function CoverageCities({
 								States
 							</div>
 						</div>
-					</div>
-
-					{/* Last updated */}
-					<div className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-mono bg-primary/10 text-primary/80 border border-primary/20">
-						<svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-							<path
-								fillRule="evenodd"
-								d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
-								clipRule="evenodd"
-							/>
-						</svg>
-						Last updated at 10:00 AM EST
 					</div>
 				</button>
 			</div>

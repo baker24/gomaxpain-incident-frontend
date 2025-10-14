@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import { Incident } from "@/types/data";
 import PatientDetails from "./patient-details";
 import { formatDate } from "./utils";
+import { faker } from "@faker-js/faker";
 interface IncidentPopupProps {
 	incident: Incident | null;
 	isOpen: boolean;
@@ -15,6 +16,9 @@ export default function IncidentPopup({
 	onClose,
 }: IncidentPopupProps) {
 	const popupRef = useRef<HTMLDivElement>(null);
+	const maskVIN = (vin: string) => {
+		return "*************" + vin.slice(-4);
+	};
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -100,27 +104,29 @@ export default function IncidentPopup({
 
 							{/* Incident Details */}
 							<div className="space-y-4">
-								{/* Incident ID */}
-								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										Incident ID
-									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-										<code className="text-sm text-foreground font-mono break-all">
-											{incident.id}
-										</code>
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									{/* Incident ID */}
+									<div className="space-y-2">
+										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+											Incident ID
+										</label>
+										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+											<code className="text-sm text-foreground font-mono break-all">
+												{incident.id}
+											</code>
+										</div>
 									</div>
-								</div>
 
-								{/* Event Type */}
-								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										Event Type
-									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-										<span className="text-sm text-foreground font-mono">
-											{incident.event}
-										</span>
+									{/* Event Type */}
+									<div className="space-y-2">
+										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+											Incident Type
+										</label>
+										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+											<span className="text-sm text-foreground font-mono">
+												{incident.event}
+											</span>
+										</div>
 									</div>
 								</div>
 
@@ -145,7 +151,7 @@ export default function IncidentPopup({
 										</label>
 										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 											<span className="text-sm text-foreground font-mono">
-												{incident.city.split(",")[1] || "N/A"}
+												{incident.state || "N/A"}
 											</span>
 										</div>
 									</div>
@@ -155,7 +161,7 @@ export default function IncidentPopup({
 										</label>
 										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 											<span className="text-sm text-foreground font-mono">
-												{incident.city.split(",")[2] || "N/A"}
+												{incident.zipcode || "N/A"}
 											</span>
 										</div>
 									</div>
@@ -172,31 +178,6 @@ export default function IncidentPopup({
 										</span>
 									</div>
 								</div>
-
-								{/* Coordinates */}
-								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										GPS Coordinates
-									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-										<div className="grid grid-cols-2 gap-4 text-sm font-mono">
-											<div>
-												<span className="text-red-400/60">Latitude:</span>
-												<br />
-												<span className="text-foreground">
-													{incident.latitude}
-												</span>
-											</div>
-											<div>
-												<span className="text-red-400/60">Longitude:</span>
-												<br />
-												<span className="text-foreground">
-													{incident.longitude}
-												</span>
-											</div>
-										</div>
-									</div>
-								</div>
 							</div>
 
 							{/* Timestamp */}
@@ -207,6 +188,39 @@ export default function IncidentPopup({
 								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 									<span className="text-sm text-foreground font-mono">
 										{formatDate(incident.createdAt)}
+									</span>
+								</div>
+							</div>
+							<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+								<div className="space-y-2">
+									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										Vehicle Model
+									</label>
+									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<span className="text-sm text-foreground font-mono">
+											{faker.vehicle.vehicle()}
+										</span>
+									</div>
+								</div>
+								<div className="space-y-2">
+									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										Vehicle Color
+									</label>
+									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<span className="text-sm text-foreground font-mono">
+											{faker.vehicle.color()}
+										</span>
+									</div>
+								</div>
+							</div>
+
+							<div className="space-y-2">
+								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									VIN Number
+								</label>
+								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<span className="text-sm text-foreground font-mono">
+										{maskVIN(faker.vehicle.vin())}
 									</span>
 								</div>
 							</div>
@@ -223,9 +237,7 @@ export default function IncidentPopup({
 							</div>
 
 							{/* Patient Details - Use different styling */}
-							<div className="bg-blue-500/5 border border-blue-500/20 rounded-lg p-4">
-								<PatientDetails />
-							</div>
+							<PatientDetails />
 						</div>
 					</div>
 				</div>

@@ -28,7 +28,6 @@ export function useAccidentMetrics() {
 				const response_data = await response.json();
 				logger.info("Metrics data:", response_data);
 
-				// API returns {success: true, data: {...}}
 				const data = response_data.data || response_data;
 
 				setMetrics({

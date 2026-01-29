@@ -23,7 +23,6 @@ export default function Map({ incident }: MapProps) {
 	const googleMapRef = useRef<google.maps.Map | null>(null);
 	const markerRef = useRef<google.maps.Marker[]>([]);
 	const advancedMarkerRef = useRef<typeof google.maps.Marker | null>(null);
-	const coverageRectanglesRef = useRef<google.maps.Rectangle[]>([]);
 	const [precipitationLayer, setPrecipitationLayer] =
 		useState<google.maps.ImageMapType | null>(null);
 	const [windLayer, setWindLayer] = useState<google.maps.ImageMapType | null>(
@@ -120,61 +119,6 @@ export default function Map({ incident }: MapProps) {
 		}
 	};
 
-	const drawCoverageAreas = async () => {
-		if (!googleMapRef.current) return;
-
-		// Clear existing rectangles
-		coverageRectanglesRef.current.forEach((rect) => rect.setMap(null));
-		coverageRectanglesRef.current = [];
-
-		try {
-			const API_URL =
-				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-			const response = await fetch(`${API_URL}/metrics/coverage-areas`);
-
-			if (!response.ok) {
-				console.error("Failed to fetch coverage areas");
-				return;
-			}
-
-			const result = await response.json();
-			const boundingBoxes = result.data || [];
-
-			// Draw rectangles for each bounding box
-			boundingBoxes.forEach(
-				(bbox: {
-					bl_lat: number;
-					bl_lon: number;
-					tr_lat: number;
-					tr_lon: number;
-				}) => {
-					const rectangle = new google.maps.Rectangle({
-						bounds: {
-							north: bbox.tr_lat,
-							south: bbox.bl_lat,
-							east: bbox.tr_lon,
-							west: bbox.bl_lon,
-						},
-						strokeColor: "#00FF00",
-						strokeOpacity: 0.6,
-						strokeWeight: 2,
-						fillColor: "#00FF00",
-						fillOpacity: 0.1,
-						map: googleMapRef.current,
-					});
-
-					coverageRectanglesRef.current.push(rectangle);
-				}
-			);
-
-			logger.info("Coverage areas drawn", {
-				count: boundingBoxes.length,
-			});
-		} catch (error) {
-			console.error("Error drawing coverage areas:", error);
-		}
-	};
-
 	useEffect(() => {
 		const initMap = async () => {
 			if (googleMapRef.current || !mapRef.current) return;
@@ -226,9 +170,6 @@ export default function Map({ incident }: MapProps) {
 				opacity: 1.0,
 			});
 			setWindLayer(WindLayer);
-
-			// Draw coverage areas
-			drawCoverageAreas();
 
 			updateIncident();
 		};
@@ -323,7 +264,7 @@ export default function Map({ incident }: MapProps) {
 			<div className="relative">
 				<div
 					ref={mapRef}
-					className="w-full h-96 border border-primary/20 rounded-lg"
+					className="w-full h-120 border border-primary/20 rounded-lg"
 				/>
 				<div
 					style={{

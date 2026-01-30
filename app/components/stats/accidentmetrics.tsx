@@ -92,21 +92,21 @@ export default function AccidentMetrics({
 					</div>
 				</div>
 
-				{/* Last Hour */}
+				{/* Last 12 Hours */}
 				<div className="bg-background/80 border border-primary/20 rounded-lg p-6 text-center">
 					<div className="text-4xl font-bold text-foreground font-mono mb-2">
 						{accidentsLastHour}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-2">
-						Incidents Detected Last Hour
+						Incidents Detected Last 12 Hours
 					</div>
 					<div className="text-xs text-secondary/60 font-mono">
 						{(() => {
 							const now = new Date();
-							const lastHour = new Date(now);
-							lastHour.setMinutes(0, 0, 0);
-							const prevHour = new Date(lastHour);
-							prevHour.setHours(prevHour.getHours() - 1);
+							const currentHour = new Date(now);
+							currentHour.setMinutes(0, 0, 0);
+							const twelveHoursAgo = new Date(currentHour);
+							twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12);
 
 							// Format to 12-hour time with AM/PM in user's timezone
 							const formatTime = (date: Date) => {
@@ -118,7 +118,7 @@ export default function AccidentMetrics({
 								});
 							};
 
-							return `${formatTime(prevHour)} - ${formatTime(lastHour)}`;
+							return `${formatTime(twelveHoursAgo)} - ${formatTime(currentHour)}`;
 						})()}
 					</div>
 				</div>

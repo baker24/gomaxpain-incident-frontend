@@ -28,10 +28,10 @@ export default function StatsPanel({ trafficreport }: StatsPanelProps) {
 					trafficreport?.coverageStates || TrafficReportExample.coverageStates
 				}
 			/>
-			<ApiData
+			{/* <ApiData
 				apidata={trafficreport?.apiSources || TrafficReportExample.apiSources}
 				datapulls={trafficreport?.dataPulls || TrafficReportExample.dataPulls}
-			/>
+			/> */}
 		</div>
 	);
 }

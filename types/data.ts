@@ -18,6 +18,7 @@ export type Incident = {
 	latitude: number;
 	longitude: number;
 	createdAt: string;
+	license: string;
 };
 
 export type IncidentDB = {
@@ -33,4 +34,5 @@ export type IncidentDB = {
 	external_id: string;
 	source: "TOMTOM" | "WAZE";
 	updated_at: string;
+	license?: string;
 };

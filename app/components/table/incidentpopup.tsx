@@ -214,14 +214,26 @@ export default function IncidentPopup({
 								</div>
 							</div>
 
-							<div className="space-y-2">
-								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-									VIN Number
-								</label>
-								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-									<span className="text-sm text-foreground font-mono">
-										{maskVIN(faker.vehicle.vin())}
-									</span>
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+								<div className="space-y-2">
+									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										VIN Number
+									</label>
+									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<span className="text-sm text-foreground font-mono">
+											{maskVIN(faker.vehicle.vin())}
+										</span>
+									</div>
+								</div>
+								<div className="space-y-2">
+									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										License Plate
+									</label>
+									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<span className="text-sm text-foreground font-mono">
+											{incident.license || "N/A"}
+										</span>
+									</div>
 								</div>
 							</div>
 						</div>

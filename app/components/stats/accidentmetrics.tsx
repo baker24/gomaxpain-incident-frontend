@@ -65,8 +65,8 @@ export default function AccidentMetrics({
 					</svg>
 					Since{" "}
 					{(() => {
-						// Start date: Oct 13, 2025 4:00 AM CDT (UTC-5)
-						const startDate = new Date("2025-10-13T09:00:00Z");
+						// Start date: Dec 21, 2025 4:00 AM EST (UTC-5)
+						const startDate = new Date("2025-12-21T09:00:00Z");
 						return startDate.toLocaleString("en-US", {
 							year: "numeric",
 							month: "short",

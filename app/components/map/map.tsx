@@ -118,25 +118,25 @@ export default function Map({
 			});
 		}
 
-		// Add patient markers (yellow)
-		if (providerPatients && Array.isArray(providerPatients)) {
-			providerPatients.forEach((patient) => {
-				try {
-					const lat = Number(patient.lat);
-					const lon = Number(patient.lon);
-					if (!isValidCoordinate(lat, lon)) return;
+		// Add patient markers (yellow) - commented out for now
+		// if (providerPatients && Array.isArray(providerPatients)) {
+		// 	providerPatients.forEach((patient) => {
+		// 		try {
+		// 			const lat = Number(patient.lat);
+		// 			const lon = Number(patient.lon);
+		// 			if (!isValidCoordinate(lat, lon)) return;
 
-					const title = `${patient.firstName} ${patient.lastName} – ${patient.case}`;
-					const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
-							<div style="font-weight: 600; color: #000;">${patient.firstName} ${patient.lastName}</div>
-							<div style="font-weight: 600; color: #000;">Case: ${patient.case}</div>
-						</div>`;
-					addMarker({ lat, lng: lon }, "yellow", title, popupHtml);
-				} catch (error) {
-					logger.error("update patients error:", error);
-				}
-			});
-		}
+		// 			const title = `${patient.firstName} ${patient.lastName} – ${patient.case}`;
+		// 			const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
+		// 					<div style="font-weight: 600; color: #000;">${patient.firstName} ${patient.lastName}</div>
+		// 					<div style="font-weight: 600; color: #000;">Case: ${patient.case}</div>
+		// 				</div>`;
+		// 			addMarker({ lat, lng: lon }, "yellow", title, popupHtml);
+		// 		} catch (error) {
+		// 			logger.error("update patients error:", error);
+		// 		}
+		// 	});
+		// }
 	};
 
 	const isValidCoordinate = (lat: number, lon: number) => {

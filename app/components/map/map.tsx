@@ -369,15 +369,11 @@ export default function Map({
 					</div>
 					<div className="flex items-center gap-2">
 						<span className="inline-block w-3 h-3 rounded-full bg-blue-500" />
-						<span>Doctors / Urgent Care</span>
+						<span>Doctors</span>
 					</div>
 					<div className="flex items-center gap-2">
 						<span className="inline-block w-3 h-3 rounded-full bg-white border border-primary/40" />
 						<span>Lawyers</span>
-					</div>
-					<div className="flex items-center gap-2">
-						<span className="inline-block w-3 h-3 rounded-full bg-yellow-300" />
-						<span>Patients</span>
 					</div>
 				</div>
 			</div>

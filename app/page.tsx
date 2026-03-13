@@ -11,7 +11,6 @@ import { logger } from "@/services/logger";
 export default function Home() {
 	const {
 		incident,
-		fetchIncidentByBounds,
 		loadState,
 		LoadState,
 		trafficReport,
@@ -51,10 +50,7 @@ export default function Home() {
 			<div className="grid grid-cols-12 gap-4">
 				<div
 					className={`${showStats ? "col-span-8" : "col-span-12"} space-y-6`}>
-					<Map
-						incident={incident}
-						fetchIncidentByBounds={fetchIncidentByBounds}
-					/>
+					<Map incident={incident} />
 					<div>
 						<h2 className="text-2xl font-bold text-foreground font-mono">
 							Incident <span className="text-primary">Table</span>

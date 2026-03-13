@@ -16,7 +16,6 @@ export function useAccidentMetrics() {
 	useEffect(() => {
 		async function fetchMetrics() {
 			try {
-				setLoading(true);
 				const API_URL =
 					process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 				const response = await fetch(`${API_URL}/metrics`);
@@ -40,17 +39,10 @@ export function useAccidentMetrics() {
 			} catch (err) {
 				console.error("Error fetching metrics:", err);
 				setError(err instanceof Error ? err.message : "Unknown error");
-			} finally {
-				setLoading(false);
 			}
 		}
 
-		fetchMetrics();
-
-		// Refresh every 5 minutes
-		const interval = setInterval(fetchMetrics, 5 * 60 * 1000);
-
-		return () => clearInterval(interval);
+		fetchMetrics().finally(() => setLoading(false));
 	}, []);
 
 	return { ...metrics, loading, error };

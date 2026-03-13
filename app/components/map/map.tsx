@@ -8,12 +8,6 @@ import { logger } from "@/services/logger";
 
 interface MapProps {
 	incident: Incident[] | null;
-	fetchIncidentByBounds: (
-		minLat: number,
-		minLng: number,
-		maxLat: number,
-		maxLng: number
-	) => void;
 }
 
 export default function Map({ incident }: MapProps) {

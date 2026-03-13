@@ -16,7 +16,6 @@ export default function useIncident() {
 	);
 	const [incident, setIncident] = useState<any>(null);
 	const [loadState, setLoadState] = useState(LoadState.LOADING);
-	const [count, setCount] = useState(0);
 	const [patients, setPatients] = useState<any>(null);
 
 	const fetchIncident = async () => {
@@ -36,51 +35,8 @@ export default function useIncident() {
 			// Extract data from new API format
 			setIncident(result.success ? result.data : []);
 			setLoadState(LoadState.LOADED);
-			setCount(count + 1);
 		} catch (error) {
 			logger.error("fetchIncident error:", error);
-			setLoadState(LoadState.ERROR);
-		}
-	};
-
-	const fetchIncidentByBounds = async (
-		minLat: number,
-		minLng: number,
-		maxLat: number,
-		maxLng: number
-	) => {
-		setLoadState(LoadState.LOADING);
-		try {
-			setIncident(null);
-
-			const API_URL =
-				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-			// Use new accidents endpoint
-			const response = await fetch(`${API_URL}/accidents?limit=100`);
-
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			const result = await response.json();
-
-			// Filter by bounds on client side
-			if (result.success && result.data) {
-				const filtered = result.data.filter(
-					(accident: any) =>
-						accident.latitude >= minLat &&
-						accident.latitude <= maxLat &&
-						accident.longitude >= minLng &&
-						accident.longitude <= maxLng
-				);
-				setIncident(filtered);
-			} else {
-				setIncident([]);
-			}
-
-			setLoadState(LoadState.LOADED);
-		} catch (error) {
-			logger.error("fetchIncidentByBounds error:", error);
 			setLoadState(LoadState.ERROR);
 		}
 	};
@@ -137,15 +93,12 @@ export default function useIncident() {
 	useEffect(() => {
 		fetchIncident();
 		fetchTrafficReport();
-		const interval = setInterval(fetchIncident, 1000000);
-		return () => clearInterval(interval);
 	}, []);
 
 	return {
 		incident,
 		setIncident,
 		fetchIncident,
-		fetchIncidentByBounds,
 		loadState,
 		LoadState,
 		fetchPatients,

@@ -36,3 +36,32 @@ export type IncidentDB = {
 	updated_at: string;
 	license?: string;
 };
+
+export type ProviderType =
+	| "DOCTOR"
+	| "LAWYER"
+	| "URGENT_CARE"
+	| "MARKETER"
+	| "ADMIN";
+
+export interface Provider {
+	firstName: string;
+	lastName: string;
+	area: string | null;
+	zipcode: string;
+	practiceName: string;
+	type: ProviderType;
+	lat: number;
+	lon: number;
+}
+
+export interface ProviderPatient {
+	firstName: string;
+	lastName: string;
+	zipcode: string;
+	target: string;
+	case: string;
+	lat: number;
+	lon: number;
+}
+

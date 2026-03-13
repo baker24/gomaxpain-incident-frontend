@@ -1,7 +1,10 @@
 "use client";
+import { useState, useEffect } from "react";
 import { logger } from "@/services/logger";
 import { TrafficReport } from "@/types/trafficreport";
-import { useState, useEffect } from "react";
+import { incidentsFixture } from "@/mocks/fixtures/incidents";
+import { metricsFixture } from "@/mocks/fixtures/metrics";
+import { providersFixture } from "@/mocks/fixtures/providers";
 
 // LoadState enum
 const LoadState = {
@@ -16,11 +19,16 @@ export default function useIncident() {
 	);
 	const [incident, setIncident] = useState<any>(null);
 	const [loadState, setLoadState] = useState(LoadState.LOADING);
-	const [patients, setPatients] = useState<any>(null);
 
 	const fetchIncident = async () => {
 		setLoadState(LoadState.LOADING);
 		try {
+			if (process.env.NEXT_PUBLIC_USE_MOCKS === "true") {
+				setIncident(incidentsFixture.data);
+				setLoadState(LoadState.LOADED);
+				return;
+			}
+
 			const API_URL =
 				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 			// Use new accidents endpoint
@@ -41,16 +49,13 @@ export default function useIncident() {
 		}
 	};
 
-	const fetchPatients = async () => {
-		const API_URL =
-			process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-		const response = await fetch(`${API_URL}/patients`);
-		const data = await response.json();
-		setPatients(data);
-	};
-
 	const fetchTrafficReport = async () => {
 		try {
+			if (process.env.NEXT_PUBLIC_USE_MOCKS === "true") {
+				setTrafficReport(metricsFixture.data as TrafficReport);
+				return;
+			}
+
 			const API_URL =
 				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 			const response = await fetch(`${API_URL}/metrics`);
@@ -101,8 +106,6 @@ export default function useIncident() {
 		fetchIncident,
 		loadState,
 		LoadState,
-		fetchPatients,
-		patients,
 		trafficReport,
 		fetchTrafficReport,
 	};

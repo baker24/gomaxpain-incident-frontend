@@ -1,16 +1,22 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
-import { Incident } from "@/types/data";
+import { Incident, Provider, ProviderPatient } from "@/types/data";
 import { mapstyle } from "@/app/components/map/constants/mapstyle";
 import State, { states } from "@/types/states";
 import { logger } from "@/services/logger";
 
 interface MapProps {
 	incident: Incident[] | null;
+	providers: Provider[] | null;
+	providerPatients: ProviderPatient[] | null;
 }
 
-export default function Map({ incident }: MapProps) {
+export default function Map({
+	incident,
+	providers,
+	providerPatients,
+}: MapProps) {
 	const [activeState, setActiveState] = useState<State | null>(null);
 	const [showWeather, setShowWeather] = useState(false);
 	const mapRef = useRef<HTMLDivElement>(null);
@@ -20,7 +26,7 @@ export default function Map({ incident }: MapProps) {
 	const [precipitationLayer, setPrecipitationLayer] =
 		useState<google.maps.ImageMapType | null>(null);
 	const [windLayer, setWindLayer] = useState<google.maps.ImageMapType | null>(
-		null
+		null,
 	);
 	const [showWind, setShowWind] = useState(false);
 
@@ -46,71 +52,136 @@ export default function Map({ incident }: MapProps) {
 		});
 		markerRef.current = [];
 
-		// Add new markers
+		// Add incident markers (red)
 		if (incident && Array.isArray(incident)) {
 			incident.forEach((incidentItem: Incident) => {
 				try {
-					const position = {
-						lat: Number(incidentItem.latitude),
-						lng: Number(incidentItem.longitude),
-					};
+					const lat = Number(incidentItem.latitude);
+					const lon = Number(incidentItem.longitude);
+					if (!isValidCoordinate(lat, lon)) return;
 
-					// Validate position coordinates
-					if (isNaN(position.lat) || isNaN(position.lng)) {
-						return;
-					}
-
-					const markerIcon = {
-						path: google.maps.SymbolPath.CIRCLE,
-						scale: 5,
-						fillColor: "red",
-						fillOpacity: 1,
-						strokeColor: "red",
-						strokeWeight: 2,
-					};
-					const glowOuterIcon = {
-						path: google.maps.SymbolPath.CIRCLE,
-						scale: 11.5,
-						fillColor: "red",
-						fillOpacity: 0.12,
-						strokeWeight: 0,
-					} as google.maps.Symbol;
-
-					const glowInnerIcon = {
-						path: google.maps.SymbolPath.CIRCLE,
-						scale: 8,
-						fillColor: "red",
-						fillOpacity: 0.22,
-						strokeWeight: 0,
-					} as google.maps.Symbol;
-
-					if (advancedMarkerRef.current) {
-						const marker = new advancedMarkerRef.current({
-							map: googleMapRef.current,
-							position: position,
-							icon: markerIcon,
-							title: incidentItem.id,
-						});
-						new advancedMarkerRef.current({
-							map: googleMapRef.current,
-							position: position,
-							icon: glowOuterIcon,
-							title: incidentItem.id,
-						});
-						new advancedMarkerRef.current({
-							map: googleMapRef.current,
-							position: position,
-							icon: glowInnerIcon,
-							title: incidentItem.id,
-						});
-
-						markerRef.current.push(marker);
-					}
+					addMarker({ lat, lng: lon }, "red", incidentItem.id);
 				} catch (error) {
 					logger.error("updateIncident error:", error);
 				}
 			});
 		}
+
+		// Add provider markers (DOCTOR, LAWYER, URGENT_CARE only; skip other types)
+		if (providers && Array.isArray(providers)) {
+			providers.forEach((provider) => {
+				try {
+					const lat = Number(provider.lat);
+					const lon = Number(provider.lon);
+					if (!isValidCoordinate(lat, lon)) return;
+
+					let color: string | null = null;
+					if (provider.type === "DOCTOR" || provider.type === "URGENT_CARE") {
+						color = "blue";
+					} else if (provider.type === "LAWYER") {
+						color = "white";
+					}
+					if (color === null) return;
+
+					const position = { lat, lng: lon };
+
+					let formattedAddress = "";
+					if (provider.area) {
+						try {
+							const parsed = JSON.parse(provider.area);
+							formattedAddress = parsed.formatted_address || "";
+						} catch {
+							formattedAddress = "";
+						}
+					}
+
+					const baseTitle = `${provider.firstName} ${provider.lastName} – ${provider.practiceName}`;
+					const fullTitle = formattedAddress
+						? `${baseTitle}\n${formattedAddress}`
+						: baseTitle;
+
+					addMarker(position, color, fullTitle);
+				} catch (error) {
+					logger.error("update providers error:", error);
+				}
+			});
+		}
+
+		// Add patient markers (yellow)
+		if (providerPatients && Array.isArray(providerPatients)) {
+			providerPatients.forEach((patient) => {
+				try {
+					const lat = Number(patient.lat);
+					const lon = Number(patient.lon);
+					if (!isValidCoordinate(lat, lon)) return;
+
+					const title = `${patient.firstName} ${patient.lastName} – ${patient.case}`;
+					addMarker({ lat, lng: lon }, "yellow", title);
+				} catch (error) {
+					logger.error("update patients error:", error);
+				}
+			});
+		}
+	};
+
+	const isValidCoordinate = (lat: number, lon: number) => {
+		return (
+			Number.isFinite(lat) && Number.isFinite(lon) && !(lat === 0 && lon === 0)
+		);
+	};
+
+	const addMarker = (
+		position: google.maps.LatLngLiteral,
+		color: string,
+		title?: string,
+	) => {
+		if (!advancedMarkerRef.current || !googleMapRef.current) return;
+
+		const baseIcon = {
+			path: google.maps.SymbolPath.CIRCLE,
+			scale: 5,
+			fillColor: color,
+			fillOpacity: 1,
+			strokeColor: color,
+			strokeWeight: 2,
+		};
+
+		const glowOuterIcon = {
+			path: google.maps.SymbolPath.CIRCLE,
+			scale: 11.5,
+			fillColor: color,
+			fillOpacity: 0.12,
+			strokeWeight: 0,
+		} as google.maps.Symbol;
+
+		const glowInnerIcon = {
+			path: google.maps.SymbolPath.CIRCLE,
+			scale: 8,
+			fillColor: color,
+			fillOpacity: 0.22,
+			strokeWeight: 0,
+		} as google.maps.Symbol;
+
+		const marker = new advancedMarkerRef.current({
+			map: googleMapRef.current,
+			position,
+			icon: baseIcon,
+			title,
+		});
+
+		new advancedMarkerRef.current({
+			map: googleMapRef.current,
+			position,
+			icon: glowOuterIcon,
+		});
+
+		new advancedMarkerRef.current({
+			map: googleMapRef.current,
+			position,
+			icon: glowInnerIcon,
+		});
+
+		markerRef.current.push(marker);
 	};
 
 	useEffect(() => {
@@ -122,7 +193,7 @@ export default function Map({ incident }: MapProps) {
 			});
 			const { Map } = await loader.importLibrary("maps");
 			const { Marker } = (await loader.importLibrary(
-				"marker"
+				"marker",
 			)) as google.maps.MarkerLibrary;
 			advancedMarkerRef.current = Marker;
 			const center = { lat: 35.906, lng: -100.05 };
@@ -174,7 +245,7 @@ export default function Map({ incident }: MapProps) {
 	useEffect(() => {
 		updateIncident();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [incident]);
+	}, [incident, providers, providerPatients]);
 
 	const handleStateClick = (state: State | null) => {
 		if (state === null) {
@@ -253,7 +324,24 @@ export default function Map({ incident }: MapProps) {
 						</button>
 					))}
 				</div>
-				<div></div>
+				<div className="flex flex-col items-end gap-2 text-xs font-mono text-foreground/70">
+					<div className="flex items-center gap-2">
+						<span className="inline-block w-3 h-3 rounded-full bg-red-500" />
+						<span>Incidents</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<span className="inline-block w-3 h-3 rounded-full bg-blue-500" />
+						<span>Doctors / Urgent Care</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<span className="inline-block w-3 h-3 rounded-full bg-white border border-primary/40" />
+						<span>Lawyers</span>
+					</div>
+					<div className="flex items-center gap-2">
+						<span className="inline-block w-3 h-3 rounded-full bg-yellow-300" />
+						<span>Patients</span>
+					</div>
+				</div>
 			</div>
 			<div className="relative">
 				<div

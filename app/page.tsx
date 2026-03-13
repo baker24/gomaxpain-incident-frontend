@@ -2,6 +2,7 @@
 import Map from "@/app/components/map/map";
 import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
+import useProviders from "@/hooks/useProviders";
 import IncidentPopup from "@/app/components/table/incidentpopup";
 import { useState } from "react";
 import { Incident } from "@/types/data";
@@ -9,14 +10,10 @@ import StatsPanel from "@/app/components/stats/stats-panel";
 import { logger } from "@/services/logger";
 
 export default function Home() {
-	const {
-		incident,
-		loadState,
-		LoadState,
-		trafficReport,
-	} = useIncident();
+	const { incident, loadState, LoadState, trafficReport } = useIncident();
+	const { providers, patients: providerPatients } = useProviders();
 	const [selectedIncident, setSelectedIncident] = useState<Incident | null>(
-		null
+		null,
 	);
 	const [isPopupOpen, setIsPopupOpen] = useState(false);
 	const [showStats, setShowStats] = useState(false);
@@ -50,7 +47,11 @@ export default function Home() {
 			<div className="grid grid-cols-12 gap-4">
 				<div
 					className={`${showStats ? "col-span-8" : "col-span-12"} space-y-6`}>
-					<Map incident={incident} />
+					<Map
+						incident={incident}
+						providers={providers}
+						providerPatients={providerPatients}
+					/>
 					<div>
 						<h2 className="text-2xl font-bold text-foreground font-mono">
 							Incident <span className="text-primary">Table</span>

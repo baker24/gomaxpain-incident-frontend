@@ -1,7 +1,8 @@
-"use client";
-
+ "use client";
+ 
 import { useState, useEffect } from "react";
 import { logger } from "@/services/logger";
+import { coverageFixture } from "@/mocks/fixtures/metrics";
 
 interface CityStats {
 	city: string;
@@ -31,6 +32,13 @@ export function useCoverageStats() {
 	useEffect(() => {
 		async function fetchCoverageStats() {
 			try {
+				if (process.env.NEXT_PUBLIC_USE_MOCKS === "true") {
+					setCoverageStats(coverageFixture.data);
+					setError(null);
+					setLoading(false);
+					return;
+				}
+
 				const API_URL =
 					process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 				const response = await fetch(`${API_URL}/metrics/coverage`);

@@ -23,6 +23,7 @@ export default function Map({
 	const googleMapRef = useRef<google.maps.Map | null>(null);
 	const markerRef = useRef<google.maps.Marker[]>([]);
 	const advancedMarkerRef = useRef<typeof google.maps.Marker | null>(null);
+	const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
 	const [precipitationLayer, setPrecipitationLayer] =
 		useState<google.maps.ImageMapType | null>(null);
 	const [windLayer, setWindLayer] = useState<google.maps.ImageMapType | null>(
@@ -100,7 +101,17 @@ export default function Map({
 						? `${baseTitle}\n${formattedAddress}`
 						: baseTitle;
 
-					addMarker(position, color, fullTitle);
+					const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
+							<div style="font-weight: 600; color: #000;">${provider.firstName} ${provider.lastName}</div>
+							<div style="font-weight: 600; color: #000;">${provider.practiceName}</div>
+							${
+								formattedAddress
+									? `<div style="margin-top: 4px; color: #4b5563;">${formattedAddress}</div>`
+									: ""
+							}
+						</div>`;
+
+					addMarker(position, color, fullTitle, popupHtml);
 				} catch (error) {
 					logger.error("update providers error:", error);
 				}
@@ -116,7 +127,11 @@ export default function Map({
 					if (!isValidCoordinate(lat, lon)) return;
 
 					const title = `${patient.firstName} ${patient.lastName} – ${patient.case}`;
-					addMarker({ lat, lng: lon }, "yellow", title);
+					const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
+							<div style="font-weight: 600; color: #000;">${patient.firstName} ${patient.lastName}</div>
+							<div style="font-weight: 600; color: #000;">Case: ${patient.case}</div>
+						</div>`;
+					addMarker({ lat, lng: lon }, "yellow", title, popupHtml);
 				} catch (error) {
 					logger.error("update patients error:", error);
 				}
@@ -134,6 +149,7 @@ export default function Map({
 		position: google.maps.LatLngLiteral,
 		color: string,
 		title?: string,
+		popupContent?: string,
 	) => {
 		if (!advancedMarkerRef.current || !googleMapRef.current) return;
 
@@ -173,13 +189,35 @@ export default function Map({
 			map: googleMapRef.current,
 			position,
 			icon: glowOuterIcon,
+			clickable: false,
 		});
 
 		new advancedMarkerRef.current({
 			map: googleMapRef.current,
 			position,
 			icon: glowInnerIcon,
+			clickable: false,
 		});
+
+		if (popupContent) {
+			if (!infoWindowRef.current) {
+				infoWindowRef.current = new google.maps.InfoWindow();
+			}
+
+			marker.addListener("mouseover", () => {
+				if (!infoWindowRef.current || !googleMapRef.current) return;
+				infoWindowRef.current.setContent(popupContent);
+				infoWindowRef.current.open({
+					anchor: marker,
+					map: googleMapRef.current,
+				});
+			});
+
+			marker.addListener("mouseout", () => {
+				if (!infoWindowRef.current) return;
+				infoWindowRef.current.close();
+			});
+		}
 
 		markerRef.current.push(marker);
 	};

@@ -69,54 +69,54 @@ export default function Map({
 		}
 
 		// Add provider markers (DOCTOR, LAWYER, URGENT_CARE only; skip other types)
-		if (providers && Array.isArray(providers)) {
-			providers.forEach((provider) => {
-				try {
-					const lat = Number(provider.lat);
-					const lon = Number(provider.lon);
-					if (!isValidCoordinate(lat, lon)) return;
+		// if (providers && Array.isArray(providers)) {
+		// 	providers.forEach((provider) => {
+		// 		try {
+		// 			const lat = Number(provider.lat);
+		// 			const lon = Number(provider.lon);
+		// 			if (!isValidCoordinate(lat, lon)) return;
 
-					let color: string | null = null;
-					if (provider.type === "DOCTOR" || provider.type === "URGENT_CARE") {
-						color = "blue";
-					} else if (provider.type === "LAWYER") {
-						color = "white";
-					}
-					if (color === null) return;
+		// 			let color: string | null = null;
+		// 			if (provider.type === "DOCTOR" || provider.type === "URGENT_CARE") {
+		// 				color = "blue";
+		// 			} else if (provider.type === "LAWYER") {
+		// 				color = "white";
+		// 			}
+		// 			if (color === null) return;
 
-					const position = { lat, lng: lon };
+		// 			const position = { lat, lng: lon };
 
-					let formattedAddress = "";
-					if (provider.area) {
-						try {
-							const parsed = JSON.parse(provider.area);
-							formattedAddress = parsed.formatted_address || "";
-						} catch {
-							formattedAddress = "";
-						}
-					}
+		// 			let formattedAddress = "";
+		// 			if (provider.area) {
+		// 				try {
+		// 					const parsed = JSON.parse(provider.area);
+		// 					formattedAddress = parsed.formatted_address || "";
+		// 				} catch {
+		// 					formattedAddress = "";
+		// 				}
+		// 			}
 
-					const baseTitle = `${provider.firstName} ${provider.lastName} – ${provider.practiceName}`;
-					const fullTitle = formattedAddress
-						? `${baseTitle}\n${formattedAddress}`
-						: baseTitle;
+		// 			const baseTitle = `${provider.firstName} ${provider.lastName} – ${provider.practiceName}`;
+		// 			const fullTitle = formattedAddress
+		// 				? `${baseTitle}\n${formattedAddress}`
+		// 				: baseTitle;
 
-					const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
-							<div style="font-weight: 600; color: #000;">${provider.firstName} ${provider.lastName}</div>
-							<div style="font-weight: 600; color: #000;">${provider.practiceName}</div>
-							${
-								formattedAddress
-									? `<div style="margin-top: 4px; color: #4b5563;">${formattedAddress}</div>`
-									: ""
-							}
-						</div>`;
+		// 			const popupHtml = `<div style="font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 12px; line-height: 1.4; margin: 0; padding: 0;">
+		// 					<div style="font-weight: 600; color: #000;">${provider.firstName} ${provider.lastName}</div>
+		// 					<div style="font-weight: 600; color: #000;">${provider.practiceName}</div>
+		// 					${
+		// 						formattedAddress
+		// 							? `<div style="margin-top: 4px; color: #4b5563;">${formattedAddress}</div>`
+		// 							: ""
+		// 					}
+		// 				</div>`;
 
-					addMarker(position, color, fullTitle, popupHtml);
-				} catch (error) {
-					logger.error("update providers error:", error);
-				}
-			});
-		}
+		// 			addMarker(position, color, fullTitle, popupHtml);
+		// 		} catch (error) {
+		// 			logger.error("update providers error:", error);
+		// 		}
+		// 	});
+		// }
 
 		// Add patient markers (yellow) - commented out for now
 		// if (providerPatients && Array.isArray(providerPatients)) {
@@ -178,26 +178,52 @@ export default function Map({
 			strokeWeight: 0,
 		} as google.maps.Symbol;
 
+		const triangle: google.maps.Symbol = {
+			path: "M 0,-1 1,1 -1,1 z",
+			scale: 6,
+			fillColor: color,
+			fillOpacity: 1,
+			strokeColor: "#000000",
+			strokeOpacity: 0.7,
+			strokeWeight: 1,
+		};
+
+		const diamond: google.maps.Symbol = {
+			path: "M 0,-1 1,0 0,1 -1,0 z",
+			scale: 6,
+			fillColor: color,
+			fillOpacity: 1,
+			strokeColor: "#000000",
+			strokeOpacity: 0.7,
+			strokeWeight: 1,
+		};
+
+		const imageIcon: google.maps.Icon = {
+			url: "/logo.png",
+			scaledSize: new google.maps.Size(120, 38),
+			anchor: new google.maps.Point(60, 38),
+		};
+
 		const marker = new advancedMarkerRef.current({
 			map: googleMapRef.current,
 			position,
-			icon: baseIcon,
+			icon: triangle,
 			title,
 		});
 
-		new advancedMarkerRef.current({
-			map: googleMapRef.current,
-			position,
-			icon: glowOuterIcon,
-			clickable: false,
-		});
+		// new advancedMarkerRef.current({
+		// 	map: googleMapRef.current,
+		// 	position,
+		// 	icon: glowOuterIcon,
+		// 	clickable: false,
+		// });
 
-		new advancedMarkerRef.current({
-			map: googleMapRef.current,
-			position,
-			icon: glowInnerIcon,
-			clickable: false,
-		});
+		// new advancedMarkerRef.current({
+		// 	map: googleMapRef.current,
+		// 	position,
+		// 	icon: glowInnerIcon,
+		// 	clickable: false,
+		// });
 
 		if (popupContent) {
 			if (!infoWindowRef.current) {
@@ -367,14 +393,14 @@ export default function Map({
 						<span className="inline-block w-3 h-3 rounded-full bg-red-500" />
 						<span>Incidents</span>
 					</div>
-					<div className="flex items-center gap-2">
+					{/* <div className="flex items-center gap-2">
 						<span className="inline-block w-3 h-3 rounded-full bg-blue-500" />
 						<span>Doctors</span>
 					</div>
 					<div className="flex items-center gap-2">
 						<span className="inline-block w-3 h-3 rounded-full bg-white border border-primary/40" />
 						<span>Lawyers</span>
-					</div>
+					</div> */}
 				</div>
 			</div>
 			<div className="relative">

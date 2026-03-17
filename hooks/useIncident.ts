@@ -15,7 +15,7 @@ const LoadState = {
 
 export default function useIncident() {
 	const [trafficReport, setTrafficReport] = useState<TrafficReport | null>(
-		null
+		null,
 	);
 	const [incident, setIncident] = useState<any>(null);
 	const [loadState, setLoadState] = useState(LoadState.LOADING);
@@ -32,7 +32,7 @@ export default function useIncident() {
 			const API_URL =
 				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 			// Use new accidents endpoint
-			const response = await fetch(`${API_URL}/accidents?limit=100`);
+			const response = await fetch(`${API_URL}/accidents?limit=500`);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);

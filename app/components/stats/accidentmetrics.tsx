@@ -88,7 +88,7 @@ export default function AccidentMetrics({
 						{accidentsToday}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Incidents Detected Today
+						Incidents Detected Last 24 hours
 					</div>
 				</div>
 
@@ -98,7 +98,7 @@ export default function AccidentMetrics({
 						{accidentsLastHour}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-2">
-						Incidents Detected Last 12 Hours
+						Of US daily incidents detected last 24 hours
 					</div>
 					<div className="text-xs text-secondary/60 font-mono">
 						{(() => {
@@ -132,7 +132,7 @@ export default function AccidentMetrics({
 						{previousDayAccidents}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Incidents Detected Yesterday
+						Incidents Detected Last 7 days
 					</div>
 				</div>
 
@@ -142,7 +142,7 @@ export default function AccidentMetrics({
 						{previousDayPercent}
 					</div>
 					<div className="text-base font-medium text-primary/80 font-mono uppercase tracking-wider mb-3">
-						Of US daily incidents detected Yesterday
+						Of US daily incidents detected last 7 days
 					</div>
 				</div>
 			</div>

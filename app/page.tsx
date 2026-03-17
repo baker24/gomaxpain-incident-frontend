@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Map from "@/app/components/map/map";
 import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
@@ -34,9 +35,19 @@ export default function Home() {
 		<div className="min-h-screen bg-background grid-bg p-6">
 			<div className="mb-6 justify-between">
 				<div className="flex items-center justify-between">
-					<h1 className="text-3xl font-bold text-foreground ">
-						GoMAXPAIN<span className="text-primary"> HEATMAP</span>
-					</h1>
+					<div className="flex items-center gap-3">
+						<Image
+							src="/logo.png"
+							alt="HelpAfterAccident logo"
+							width={190}
+							height={60}
+							className="h-auto w-auto max-h-16"
+							priority
+						/>
+						<h1 className="text-3xl font-bold text-foreground ">
+							<span className="text-primary">HEATMAP</span>
+						</h1>
+					</div>
 					<button onClick={() => setShowStats(!showStats)}>
 						{showStats ? "Hide" : "Show"} Metrics
 					</button>

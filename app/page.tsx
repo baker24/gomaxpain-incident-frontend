@@ -33,7 +33,7 @@ export default function Home() {
 	logger.info("Traffic Report", trafficReport);
 	return (
 		<div className="min-h-screen bg-background grid-bg p-6">
-			<div className="mb-6 justify-between">
+			<div className="mb-6 justify-between sticky top-0 z-30 bg-background/95 backdrop-blur-sm pt-4">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<Image
@@ -52,7 +52,7 @@ export default function Home() {
 						{showStats ? "Hide" : "Show"} Metrics
 					</button>
 				</div>
-				<div className="h-px bg-secondary my-4" />
+				<div className="h-px bg-secondary mt-4" />
 			</div>
 
 			<div className="grid grid-cols-1 md:grid-cols-12 gap-4">

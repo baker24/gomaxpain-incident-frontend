@@ -15,19 +15,28 @@ export default function StatsPanel({ trafficreport }: StatsPanelProps) {
 				</h2>
 				<div className="h-px bg-primary/20 my-3" />
 			</div>
-			<AccidentMetrics
-				accidentmetrics={
-					trafficreport?.accidentMetrics || TrafficReportExample.accidentMetrics
-				}
-			/>
-			<CoverageCities
-				coveragecities={
-					trafficreport?.coverageCities || TrafficReportExample.coverageCities
-				}
-				converagestate={
-					trafficreport?.coverageStates || TrafficReportExample.coverageStates
-				}
-			/>
+			<div className="space-y-4">
+				<div className="rounded-lg border border-primary/20 bg-card/60 backdrop-blur-sm p-4 shadow-sm">
+					<AccidentMetrics
+						accidentmetrics={
+							trafficreport?.accidentMetrics ||
+							TrafficReportExample.accidentMetrics
+						}
+					/>
+				</div>
+				<div className="rounded-lg border border-primary/20 bg-card/60 backdrop-blur-sm p-4 shadow-sm">
+					<CoverageCities
+						coveragecities={
+							trafficreport?.coverageCities ||
+							TrafficReportExample.coverageCities
+						}
+						converagestate={
+							trafficreport?.coverageStates ||
+							TrafficReportExample.coverageStates
+						}
+					/>
+				</div>
+			</div>
 			{/* <ApiData
 				apidata={trafficreport?.apiSources || TrafficReportExample.apiSources}
 				datapulls={trafficreport?.dataPulls || TrafficReportExample.dataPulls}

@@ -26,6 +26,30 @@ body {
 	font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Global dark scrollbars */
+* {
+	scrollbar-width: thin; /* Firefox */
+	scrollbar-color: #020617 #020617; /* thumb and track */
+}
+
+*::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+	background: #020617;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: #111827;
+	border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+	background: #1f2937;
+}
+
 /* Slightly reduce global scale (affects all rem-based sizes) */
 html {
 	font-size: 14px; /* default ~16px → 14px ≈ 87.5% scale */

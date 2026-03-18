@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Loader } from "@googlemaps/js-api-loader";
+import { MarkerClusterer, Renderer } from "@googlemaps/markerclusterer";
 import { Incident, Provider, ProviderPatient } from "@/types/data";
 import { mapstyle } from "@/app/components/map/constants/mapstyle";
 import State, { states } from "@/types/states";
@@ -11,6 +12,28 @@ interface MapProps {
 	providers: Provider[] | null;
 	providerPatients: ProviderPatient[] | null;
 }
+
+const clusterRenderer: Renderer = {
+	render: ({ count, position }) =>
+		new google.maps.Marker({
+			position,
+			label: {
+				text: String(count),
+				color: "#ffffff",
+				fontSize: "12px",
+				fontWeight: "600",
+			},
+			icon: {
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 18,
+				fillColor: "#ef4444", // red-500
+				fillOpacity: 0.9,
+				strokeColor: "#7f1d1d", // dark red border
+				strokeWeight: 2,
+			},
+			zIndex: 1000,
+		}),
+};
 
 export default function Map({
 	incident,
@@ -23,6 +46,7 @@ export default function Map({
 	const googleMapRef = useRef<google.maps.Map | null>(null);
 	const markerRef = useRef<google.maps.Marker[]>([]);
 	const advancedMarkerRef = useRef<typeof google.maps.Marker | null>(null);
+	const clustererRef = useRef<MarkerClusterer | null>(null);
 	const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
 	const [precipitationLayer, setPrecipitationLayer] =
 		useState<google.maps.ImageMapType | null>(null);
@@ -41,31 +65,49 @@ export default function Map({
 	const updateIncident = () => {
 		if (!googleMapRef.current) return;
 
-		// Clear existing markers first
+		// Clear existing markers and clusterer first
+		if (clustererRef.current) {
+			clustererRef.current.clearMarkers();
+		}
 		markerRef.current.forEach((marker) => {
 			marker.setMap(null);
-		});
-		markerRef.current.forEach((glowOuterMarker) => {
-			glowOuterMarker.setMap(null);
-		});
-		markerRef.current.forEach((glowInnerMarker) => {
-			glowInnerMarker.setMap(null);
 		});
 		markerRef.current = [];
 
 		// Add incident markers (red)
-		if (incident && Array.isArray(incident)) {
-			incident.forEach((incidentItem: Incident) => {
+		const newMarkers: google.maps.Marker[] = [];
+		const incidentsToRender =
+			incident && Array.isArray(incident) && incident.length > 0
+				? incident
+				: [];
+
+		if (incidentsToRender && Array.isArray(incidentsToRender)) {
+			incidentsToRender.forEach((incidentItem: Incident) => {
 				try {
 					const lat = Number(incidentItem.latitude);
 					const lon = Number(incidentItem.longitude);
 					if (!isValidCoordinate(lat, lon)) return;
 
-					addMarker({ lat, lng: lon }, "red", incidentItem.id);
+					const marker = addMarker({ lat, lng: lon }, "red", incidentItem.id);
+					if (marker) {
+						newMarkers.push(marker);
+					}
 				} catch (error) {
 					logger.error("updateIncident error:", error);
 				}
 			});
+		}
+
+		if (newMarkers.length > 0 && googleMapRef.current) {
+			if (!clustererRef.current) {
+				clustererRef.current = new MarkerClusterer({
+					map: googleMapRef.current,
+					markers: newMarkers,
+					renderer: clusterRenderer,
+				});
+			} else {
+				clustererRef.current.addMarkers(newMarkers);
+			}
 		}
 
 		// Add provider markers (DOCTOR, LAWYER, URGENT_CARE only; skip other types)
@@ -150,8 +192,8 @@ export default function Map({
 		color: string,
 		title?: string,
 		popupContent?: string,
-	) => {
-		if (!advancedMarkerRef.current || !googleMapRef.current) return;
+	): google.maps.Marker | null => {
+		if (!advancedMarkerRef.current || !googleMapRef.current) return null;
 
 		const baseIcon = {
 			path: google.maps.SymbolPath.CIRCLE,
@@ -205,7 +247,6 @@ export default function Map({
 		};
 
 		const marker = new advancedMarkerRef.current({
-			map: googleMapRef.current,
 			position,
 			icon: triangle,
 			title,
@@ -246,6 +287,7 @@ export default function Map({
 		}
 
 		markerRef.current.push(marker);
+		return marker;
 	};
 
 	useEffect(() => {
@@ -272,6 +314,7 @@ export default function Map({
 			};
 			const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
 			googleMapRef.current = map;
+			// Clusterer will be created on first updateIncident call when markers exist
 
 			const WeatherLayer = new google.maps.ImageMapType({
 				getTileUrl: (coord: google.maps.Point, zoom: number) => {

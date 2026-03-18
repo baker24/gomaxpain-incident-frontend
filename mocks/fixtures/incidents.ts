@@ -31,4 +31,3 @@ export const incidentsFixture = {
 	success: true,
 	data: incidents,
 };
-

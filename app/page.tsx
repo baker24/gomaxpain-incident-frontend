@@ -44,7 +44,7 @@ export default function Home() {
 							className="h-auto w-auto max-h-16"
 							priority
 						/>
-						<h1 className="text-3xl font-bold text-foreground ">
+						<h1 className="sm:text-3xl text-2xl font-bold text-foreground ">
 							<span className="text-primary">HEATMAP</span>
 						</h1>
 					</div>
@@ -55,9 +55,11 @@ export default function Home() {
 				<div className="h-px bg-secondary my-4" />
 			</div>
 
-			<div className="grid grid-cols-12 gap-4">
+			<div className="grid grid-cols-1 md:grid-cols-12 gap-4">
 				<div
-					className={`${showStats ? "col-span-8" : "col-span-12"} space-y-6`}>
+					className={`space-y-6 pr-0 md:pr-2 ${
+						showStats ? "md:col-span-8" : "md:col-span-12"
+					} md:max-h-[calc(100vh-160px)] md:overflow-y-auto md:overflow-x-hidden`}>
 					<Map
 						incident={incident}
 						providers={providers}
@@ -97,11 +99,48 @@ export default function Home() {
 					</div>
 				</div>
 				{showStats && (
-					<div className="col-span-4">
+					<div className="hidden md:block md:col-span-4 md:max-h-[calc(100vh-160px)] md:overflow-y-auto md:overflow-x-hidden md:pl-2">
 						<StatsPanel trafficreport={trafficReport} />
 					</div>
 				)}
 			</div>
+
+			{/* Mobile Metrics Bottom Sheet */}
+			{showStats && (
+				<div className="fixed inset-0 z-40 flex items-end md:hidden">
+					<button
+						type="button"
+						aria-label="Close metrics"
+						onClick={() => setShowStats(false)}
+						className="absolute inset-0 bg-black/50"
+					/>
+					<div className="relative z-10 w-full max-h-[80vh] bg-background border-t border-primary/20 rounded-t-2xl shadow-2xl p-4 overflow-y-auto">
+						<div className="flex items-center justify-between mb-3">
+							<h2 className="text-lg font-bold text-foreground font-mono">
+								Accident <span className="text-primary">Metrics</span>
+							</h2>
+							<button
+								onClick={() => setShowStats(false)}
+								className="p-2 text-muted-foreground hover:text-foreground hover:bg-primary/5 rounded-md"
+								aria-label="Close metrics panel">
+								<svg
+									className="w-5 h-5"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M6 18L18 6M6 6l12 12"
+									/>
+								</svg>
+							</button>
+						</div>
+						<StatsPanel trafficreport={trafficReport} />
+					</div>
+				</div>
+			)}
 
 			{/* Incident Details Popup */}
 			<IncidentPopup

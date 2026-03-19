@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 import { Incident } from "@/types/data";
 import PatientDetails from "./patient-details";
 import { formatDate } from "./utils";
-import { faker } from "@faker-js/faker";
 interface IncidentPopupProps {
 	incident: Incident | null;
 	isOpen: boolean;
@@ -16,9 +15,6 @@ export default function IncidentPopup({
 	onClose,
 }: IncidentPopupProps) {
 	const popupRef = useRef<HTMLDivElement>(null);
-	const maskVIN = (vin: string) => {
-		return "*************" + vin.slice(-4);
-	};
 
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
@@ -191,26 +187,14 @@ export default function IncidentPopup({
 									</span>
 								</div>
 							</div>
-							<div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										Vehicle Model
-									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-										<span className="text-sm text-foreground font-mono">
-											{faker.vehicle.vehicle()}
-										</span>
-									</div>
-								</div>
-								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
-										Vehicle Color
-									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
-										<span className="text-sm text-foreground font-mono">
-											{faker.vehicle.color()}
-										</span>
-									</div>
+							<div className="space-y-2">
+								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									Vehicle Model
+								</label>
+								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<span className="text-sm text-foreground font-mono">
+										{incident.vehicle || "N/A"}
+									</span>
 								</div>
 							</div>
 
@@ -221,7 +205,7 @@ export default function IncidentPopup({
 									</label>
 									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
 										<span className="text-sm text-foreground font-mono">
-											{maskVIN(faker.vehicle.vin())}
+											{incident.vin || "N/A"}
 										</span>
 									</div>
 								</div>

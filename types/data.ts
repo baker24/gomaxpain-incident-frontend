@@ -15,10 +15,13 @@ export type Incident = {
 	state: string;
 	zipcode: string;
 	intersection: string;
+	vehicle?: string;
 	latitude: number;
 	longitude: number;
 	createdAt: string;
 	license: string;
+	vin?: string;
+	sourceUrl?: string;
 };
 
 export type IncidentDB = {

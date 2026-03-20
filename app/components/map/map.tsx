@@ -11,6 +11,10 @@ interface MapProps {
 	incident: Incident[] | null;
 	providers: Provider[] | null;
 	providerPatients: ProviderPatient[] | null;
+	activeState: State | null;
+	onActiveStateChange: (state: State | null) => void;
+	timelineHours: number;
+	onTimelineHoursChange: (hours: number) => void;
 }
 
 const clusterRenderer: Renderer = {
@@ -39,8 +43,11 @@ export default function Map({
 	incident,
 	providers,
 	providerPatients,
+	activeState,
+	onActiveStateChange,
+	timelineHours,
+	onTimelineHoursChange,
 }: MapProps) {
-	const [activeState, setActiveState] = useState<State | null>(null);
 	const [showWeather, setShowWeather] = useState(false);
 	const mapRef = useRef<HTMLDivElement>(null);
 	const googleMapRef = useRef<google.maps.Map | null>(null);
@@ -356,13 +363,20 @@ export default function Map({
 
 	const handleStateClick = (state: State | null) => {
 		if (state === null) {
-			setActiveState(null);
+			onActiveStateChange(null);
 			recenterMap(35.906, -100.05, 4.5);
 			return;
 		}
-		setActiveState(state);
+		onActiveStateChange(state);
 		recenterMap(state.latitude, state.longitude, 6.5);
 	};
+
+	const timelineOptions = [
+		{ hours: 12, label: "12h" },
+		{ hours: 24, label: "24h" },
+		{ hours: 168, label: "7d" },
+		{ hours: 720, label: "30d" },
+	];
 
 	const removeOverlayLayer = (layer: google.maps.ImageMapType) => {
 		if (!googleMapRef.current) return;
@@ -404,32 +418,59 @@ export default function Map({
 			<div className="h-px bg-primary/20 my-3" />
 			<div className="flex justify-between">
 				{/* Location Buttons */}
-				<div className="flex gap-3 flex-wrap">
-					<button
-						onClick={() => handleStateClick(null)}
-						style={{
-							backgroundColor:
-								activeState?.name === null
-									? "rgba(0, 123, 255, 0.1)"
-									: "transparent",
-						}}
-						className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
-						All
-					</button>
-					{states.map((state) => (
-						<button
-							key={state.name}
-							onClick={() => handleStateClick(state)}
-							style={{
-								backgroundColor:
-									activeState?.name === state.name
-										? "rgba(0, 123, 255, 0.1)"
-										: "transparent",
-							}}
-							className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
-							{state.name}
-						</button>
-					))}
+				<div className="flex flex-col gap-2">
+					{/* State Filters */}
+					<div className="flex flex-col gap-1">
+						<div className="text-xs font-mono text-foreground/70">States:</div>
+						<div className="flex gap-3 flex-wrap items-center">
+							<button
+								onClick={() => handleStateClick(null)}
+								style={{
+									backgroundColor:
+										activeState === null
+											? "rgba(0, 123, 255, 0.1)"
+											: "transparent",
+								}}
+								className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
+								All
+							</button>
+							{states.map((state) => (
+							<button
+								key={state.name}
+								onClick={() => handleStateClick(state)}
+								style={{
+									backgroundColor:
+										activeState?.abbr === state.abbr
+											? "rgba(0, 123, 255, 0.1)"
+											: "transparent",
+								}}
+								className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
+								{state.name}
+							</button>
+							))}
+						</div>
+					</div>
+
+					{/* Timeline Filters (API expects `timeline` in hours) */}
+					<div className="flex flex-col gap-1">
+						<div className="text-xs font-mono text-foreground/70">Timeline:</div>
+						<div className="flex gap-3 flex-wrap items-center">
+							{timelineOptions.map((opt) => (
+								<button
+									key={opt.hours}
+									onClick={() => onTimelineHoursChange(opt.hours)}
+									style={{
+										backgroundColor:
+											timelineHours === opt.hours
+												? "rgba(0, 123, 255, 0.1)"
+												: "transparent",
+									}}
+									className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
+									{opt.label}
+								</button>
+							))}
+						</div>
+					</div>
 				</div>
 				<div className="flex flex-col items-end gap-2 text-xs font-mono text-foreground/70">
 					<div className="flex items-center gap-2">

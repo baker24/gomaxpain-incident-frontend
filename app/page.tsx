@@ -5,13 +5,24 @@ import Table from "@/app/components/table/table";
 import useIncident from "@/hooks/useIncident";
 import useProviders from "@/hooks/useProviders";
 import IncidentPopup from "@/app/components/table/incidentpopup";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Incident } from "@/types/data";
 import StatsPanel from "@/app/components/stats/stats-panel";
 import { logger } from "@/services/logger";
+import State from "@/types/states";
 
 export default function Home() {
-	const { incident, loadState, LoadState, trafficReport } = useIncident();
+	const [selectedState, setSelectedState] = useState<State | null>(null);
+	const [timelineHours, setTimelineHours] = useState<number>(168);
+	const stateCodes = useMemo(
+		() => (selectedState ? [selectedState.abbr] : null),
+		[selectedState],
+	);
+
+	const { incident, loadState, LoadState, trafficReport } = useIncident({
+		stateCodes,
+		timelineHours,
+	});
 	const { providers, patients: providerPatients } = useProviders();
 	const [selectedIncident, setSelectedIncident] = useState<Incident | null>(
 		null,
@@ -64,6 +75,10 @@ export default function Home() {
 						incident={incident}
 						providers={providers}
 						providerPatients={providerPatients}
+						activeState={selectedState}
+						onActiveStateChange={setSelectedState}
+						timelineHours={timelineHours}
+						onTimelineHoursChange={setTimelineHours}
 					/>
 					<div>
 						<h2 className="text-2xl font-bold text-foreground font-mono">

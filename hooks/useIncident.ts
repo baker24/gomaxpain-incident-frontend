@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { logger } from "@/services/logger";
+import { Incident } from "@/types/data";
 import { TrafficReport } from "@/types/trafficreport";
 import { incidentsFixture } from "@/mocks/fixtures/incidents";
 import { metricsFixture } from "@/mocks/fixtures/metrics";
-import { providersFixture } from "@/mocks/fixtures/providers";
 
 // LoadState enum
 const LoadState = {
@@ -13,26 +13,43 @@ const LoadState = {
 	ERROR: "error",
 };
 
-export default function useIncident() {
+type UseIncidentArgs = {
+	stateCodes?: string[] | null;
+	timelineHours?: number;
+};
+
+export default function useIncident({
+	stateCodes = null,
+	timelineHours = 168,
+}: UseIncidentArgs = {}) {
 	const [trafficReport, setTrafficReport] = useState<TrafficReport | null>(
 		null,
 	);
-	const [incident, setIncident] = useState<any>(null);
+	const [incident, setIncident] = useState<Incident[] | null>(null);
 	const [loadState, setLoadState] = useState(LoadState.LOADING);
 
-	const fetchIncident = async () => {
+	const fetchIncident = useCallback(async () => {
 		setLoadState(LoadState.LOADING);
 		try {
-			if (process.env.NEXT_PUBLIC_USE_MOCKS === "true") {
-				setIncident(incidentsFixture.data);
-				setLoadState(LoadState.LOADED);
-				return;
-			}
-
 			const API_URL =
 				process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
-			// Use new accidents endpoint
-			const response = await fetch(`${API_URL}/accidents?limit=500`);
+
+			const params = new URLSearchParams({
+				limit: "500",
+				timeline: String(timelineHours),
+			});
+
+			if (stateCodes && stateCodes.length > 0) {
+				params.set("states", JSON.stringify(stateCodes));
+			}
+
+			const accidentsUrl = `${API_URL}/accidents?${params.toString()}`;
+			console.log(
+				"[useIncident] fetch incidents",
+				{ stateCodes, timelineHours },
+				accidentsUrl,
+			);
+			const response = await fetch(accidentsUrl);
 
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -41,13 +58,13 @@ export default function useIncident() {
 			const result = await response.json();
 
 			// Extract data from new API format
-			setIncident(result.success ? result.data : []);
+			setIncident((result.success ? result.data : []) as Incident[]);
 			setLoadState(LoadState.LOADED);
 		} catch (error) {
 			logger.error("fetchIncident error:", error);
 			setLoadState(LoadState.ERROR);
 		}
-	};
+	}, [stateCodes, timelineHours]);
 
 	const fetchTrafficReport = async () => {
 		try {
@@ -96,9 +113,12 @@ export default function useIncident() {
 	};
 
 	useEffect(() => {
-		fetchIncident();
 		fetchTrafficReport();
 	}, []);
+
+	useEffect(() => {
+		fetchIncident();
+	}, [fetchIncident]);
 
 	return {
 		incident,

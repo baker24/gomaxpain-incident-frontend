@@ -52,10 +52,10 @@ export default function Home() {
 							alt="HelpAfterAccident logo"
 							width={190}
 							height={60}
-							className="h-auto w-auto max-h-16"
+							className="h-auto w-auto max-h-10 sm:max-h-14 md:max-h-16"
 							priority
 						/>
-						<h1 className="sm:text-3xl text-2xl font-bold text-foreground ">
+						<h1 className="sm:text-3xl text-xl font-bold text-foreground ">
 							<span className="text-primary">HEATMAP</span>
 						</h1>
 					</div>

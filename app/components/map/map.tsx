@@ -435,18 +435,19 @@ export default function Map({
 								All
 							</button>
 							{states.map((state) => (
-							<button
-								key={state.name}
-								onClick={() => handleStateClick(state)}
-								style={{
-									backgroundColor:
-										activeState?.abbr === state.abbr
-											? "rgba(0, 123, 255, 0.1)"
-											: "transparent",
-								}}
-								className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
-								{state.name}
-							</button>
+								<button
+									key={state.abbr}
+									onClick={() => handleStateClick(state)}
+									style={{
+										backgroundColor:
+											activeState?.abbr === state.abbr
+												? "rgba(0, 123, 255, 0.1)"
+												: "transparent",
+									}}
+									className="px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 rounded-md font-mono text-sm transition-colors">
+									<span className="sm:hidden">{state.abbr}</span>
+									<span className="hidden sm:inline">{state.name}</span>
+								</button>
 							))}
 						</div>
 					</div>
@@ -472,7 +473,7 @@ export default function Map({
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col items-end gap-2 text-xs font-mono text-foreground/70">
+				<div className="hidden md:flex md:flex-col md:items-end gap-2 text-xs font-mono text-foreground/70">
 					<div className="flex items-center gap-2">
 						<span className="inline-block w-3 h-3 rounded-full bg-red-500" />
 						<span>Incidents</span>

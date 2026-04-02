@@ -1,4 +1,4 @@
-# GoMaxPain Incident Dashboard - Frontend
+# HelpAfterAccident Incident Dashboard - Frontend
 
 A real-time traffic incident monitoring dashboard with interactive maps, weather overlays, and live analytics.
 
@@ -66,4 +66,4 @@ npm run build
 
 ---
 
-**Built with ❤️ for traffic safety monitoring by GoMAXPAIN**
+**Built with ❤️ for traffic safety monitoring by HelpAfterAccident**

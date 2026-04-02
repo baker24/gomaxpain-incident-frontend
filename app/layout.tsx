@@ -13,11 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "GoMAXPAIN Incident Dashboard",
+	title: "HelpAfterAccident Incident Dashboard",
 	description:
-		"GoMAXPAIN Incident Dashboard – real-time incident visualization and metrics for traffic operations.",
+		"HelpAfterAccident Incident Dashboard – real-time incident visualization and metrics for traffic operations.",
 	icons: {
-		icon: "/GoMAX-Main-02.svg",
+		icon: "/favicon.png",
 	},
 };
 

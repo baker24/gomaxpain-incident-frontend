@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 	description:
 		"HelpAfterAccident Incident Dashboard – real-time incident visualization and metrics for traffic operations.",
 	icons: {
-		icon: "/favicon.png",
+		icon: "/favicon.svg",
 	},
 };
 

@@ -48,11 +48,11 @@ export default function Home() {
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<Image
-							src="/logo.png"
+							src="/logo.svg"
 							alt="HelpAfterAccident logo"
-							width={190}
-							height={60}
-							className="h-auto w-auto max-h-10 sm:max-h-14 md:max-h-16"
+							width={200}
+							height={100}
+							className="max-h-10 sm:max-h-14 md:max-h-16"
 							priority
 						/>
 						<h1 className="sm:text-3xl text-xl font-bold text-foreground ">

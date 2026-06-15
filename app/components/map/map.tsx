@@ -248,7 +248,7 @@ export default function Map({
 		};
 
 		const imageIcon: google.maps.Icon = {
-			url: "/logo.png",
+			url: "/logo.svg",
 			scaledSize: new google.maps.Size(120, 38),
 			anchor: new google.maps.Point(60, 38),
 		};

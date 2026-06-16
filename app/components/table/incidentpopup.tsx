@@ -91,9 +91,9 @@ export default function IncidentPopup({
 						{/* INCIDENT INFORMATION SECTION */}
 						<div className="space-y-4">
 							{/* Section Header */}
-							<div className="flex items-center gap-3 pb-3 border-b-2 border-red-500/30">
-								<div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-								<h3 className="text-lg font-semibold text-red-400 font-mono uppercase tracking-wider">
+							<div className="flex items-center gap-3 pb-3 border-b-2 border-[#E00271]/30">
+								<div className="w-2 h-2 bg-[#E00271] rounded-full animate-pulse" />
+								<h3 className="text-lg font-semibold text-[#E00271] font-mono uppercase tracking-wider">
 									🚨 Incident Information
 								</h3>
 							</div>
@@ -103,10 +103,10 @@ export default function IncidentPopup({
 								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									{/* Incident ID */}
 									<div className="space-y-2">
-										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 											Incident ID
 										</label>
-										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 											<code className="text-sm text-foreground font-mono break-all">
 												{incident.id}
 											</code>
@@ -115,10 +115,10 @@ export default function IncidentPopup({
 
 									{/* Event Type */}
 									<div className="space-y-2">
-										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 											Incident Type
 										</label>
-										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 											<span className="text-sm text-foreground font-mono">
 												{incident.event}
 											</span>
@@ -131,10 +131,10 @@ export default function IncidentPopup({
 								<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 									<div className="space-y-3">
 										<div className="space-y-2">
-											<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+											<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 												City
 											</label>
-											<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+											<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 												<span className="text-sm text-foreground font-mono">
 													{incident.city.split(",")[0] || "N/A"}
 												</span>
@@ -142,20 +142,20 @@ export default function IncidentPopup({
 										</div>
 									</div>
 									<div className="space-y-2">
-										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 											State
 										</label>
-										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 											<span className="text-sm text-foreground font-mono">
 												{incident.state || "N/A"}
 											</span>
 										</div>
 									</div>
 									<div className="space-y-2">
-										<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+										<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 											Zipcode
 										</label>
-										<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+										<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 											<span className="text-sm text-foreground font-mono">
 												{incident.zipcode || "N/A"}
 											</span>
@@ -165,10 +165,10 @@ export default function IncidentPopup({
 
 								<div className="space-y-3"></div>
 								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 										Intersection
 									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 										<span className="text-sm text-foreground font-mono">
 											{incident.intersection || "N/A"}
 										</span>
@@ -178,20 +178,20 @@ export default function IncidentPopup({
 
 							{/* Timestamp */}
 							<div className="space-y-2">
-								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+								<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 									Incident Reported
 								</label>
-								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+								<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 									<span className="text-sm text-foreground font-mono">
 										{formatDate(incident.createdAt)}
 									</span>
 								</div>
 							</div>
 							<div className="space-y-2">
-								<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+								<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 									Vehicle Model
 								</label>
-								<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+								<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 									<span className="text-sm text-foreground font-mono">
 										{incident.vehicle || "N/A"}
 									</span>
@@ -200,20 +200,20 @@ export default function IncidentPopup({
 
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 										VIN Number
 									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 										<span className="text-sm text-foreground font-mono">
 											{incident.vin || "N/A"}
 										</span>
 									</div>
 								</div>
 								<div className="space-y-2">
-									<label className="text-sm font-medium text-red-400/80 font-mono uppercase tracking-wider">
+									<label className="text-sm font-medium text-[#E00271]/80 font-mono uppercase tracking-wider">
 										License Plate
 									</label>
-									<div className="p-3 bg-red-500/5 border border-red-500/20 rounded-md">
+									<div className="p-3 bg-[#E00271]/5 border border-[#E00271]/20 rounded-md">
 										<span className="text-sm text-foreground font-mono">
 											{incident.license || "N/A"}
 										</span>

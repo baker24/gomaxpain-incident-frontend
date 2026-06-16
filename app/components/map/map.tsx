@@ -95,7 +95,7 @@ export default function Map({
 					const lon = Number(incidentItem.longitude);
 					if (!isValidCoordinate(lat, lon)) return;
 
-					const marker = addMarker({ lat, lng: lon }, "red", incidentItem.id);
+					const marker = addMarker({ lat, lng: lon }, "#E00271", incidentItem.id);
 					if (marker) {
 						newMarkers.push(marker);
 					}

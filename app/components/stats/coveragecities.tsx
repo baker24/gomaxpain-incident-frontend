@@ -167,7 +167,7 @@ export default function CoverageCities({
 												{stateName}
 											</h4>
 											<div className="flex items-center gap-3">
-												<div className="text-xs text-accent/80 font-mono font-semibold">
+												<div className="text-xs text-[#E00271] font-mono font-semibold">
 													{stateData?.count || 0} accidents
 												</div>
 												<div className="text-xs text-primary/60 font-mono">
@@ -183,7 +183,7 @@ export default function CoverageCities({
 													key={`${cityData.city}-${stateName}-${idx}`}
 													className="px-3 py-2 bg-primary/5 border border-primary/10 rounded-md text-sm font-mono text-foreground/90 hover:bg-primary/10 hover:border-primary/20 transition-colors duration-200 flex items-center justify-between">
 													<span>{cityData.city}</span>
-													<span className="text-xs text-accent/70 font-semibold">
+													<span className="text-xs text-[#E00271] font-semibold">
 														{cityData.count}
 													</span>
 												</div>
@@ -208,7 +208,7 @@ export default function CoverageCities({
 					Monitoring {totalCities} cities across {totalStates} states
 				</div>
 				{coverageStats && (
-					<div className="mt-2 text-xs text-accent/70 font-mono font-semibold">
+					<div className="mt-2 text-xs text-[#E00271] font-mono font-semibold">
 						Total: {states.reduce((sum, s) => sum + s.count, 0)} accidents
 						tracked
 					</div>

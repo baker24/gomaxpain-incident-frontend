@@ -475,7 +475,7 @@ export default function Map({
 				</div>
 				<div className="hidden md:flex md:flex-col md:items-end gap-2 text-xs font-mono text-foreground/70">
 					<div className="flex items-center gap-2">
-						<span className="inline-block w-3 h-3 rounded-full bg-red-500" />
+						<span className="inline-block w-3 h-3 rounded-full bg-[#E00271]" />
 						<span>Incidents</span>
 					</div>
 					{/* <div className="flex items-center gap-2">

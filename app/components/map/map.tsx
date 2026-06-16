@@ -30,9 +30,9 @@ const clusterRenderer: Renderer = {
 			icon: {
 				path: google.maps.SymbolPath.CIRCLE,
 				scale: 18,
-				fillColor: "#ef4444", // red-500
+				fillColor: "#E00271", // red-500
 				fillOpacity: 0.9,
-				strokeColor: "#7f1d1d", // dark red border
+				strokeColor: "#800040", // dark red border
 				strokeWeight: 2,
 			},
 			zIndex: 1000,
